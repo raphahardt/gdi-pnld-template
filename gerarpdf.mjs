@@ -1,4 +1,3 @@
-import inquirer from 'inquirer';
 import fileSelector from 'inquirer-file-selector';
 import path from 'path';
 import fs from 'fs';
@@ -22,6 +21,11 @@ const selectedPath = path.dirname(indexPath);
 const isVertical = htmlCode.match(/vertical/);
 
 const clickables = htmlCode.match(/\b(data-click|data-slide)\b/g);
+
+if (!(await fs.promises.readFile(path.resolve(selectedPath, 'resources/scripts/scripts.js'), 'utf-8')).match(/if \(hash\) \{/)) {
+  console.log('Atualize primeiro os resources usando o comando "node atualizar_resources.mjs"');
+  process.exit(0);
+}
 
 const timesnapOptions = {
   viewport: {
