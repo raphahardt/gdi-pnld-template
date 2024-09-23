@@ -1,0 +1,564 @@
+/* Estilos Básicos */
+/* --- NÃO EDITAR --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+body, html { height: 100%; margin: 0 }
+body {
+    font-size: 16px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+a,
+[data-tooltip-open],
+[data-popup-open],
+[data-popup-close],
+[data-popup] > .close,
+[data-collapse-open],
+ul[data-menu] button,
+#menu::after,
+[data-slides] .slide-right,
+[data-slides] .slide-left {
+    cursor: url("../images/click-hand.png") 6 6, pointer;
+}
+[data-tooltip] {
+    display: none;
+    position: absolute;
+    width: 100ch;
+}
+@keyframes popup-open {
+    from {
+        opacity: 0;
+        scale: 0.98;
+        display: none;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+        display: block;
+    }
+}
+@keyframes popup-close {
+    from {
+        opacity: 1;
+        scale: 1;
+        display: block;
+    }
+    to {
+        opacity: 0;
+        scale: 0.98;
+        display: none;
+    }
+}
+@keyframes backdrop-open {
+    from {
+        opacity: 0;
+        display: none;
+    }
+    to {
+        opacity: 0.5;
+        display: block;
+    }
+}
+@keyframes backdrop-close {
+    from {
+        opacity: 0.5;
+        display: block;
+    }
+    to {
+        opacity: 0;
+        display: none;
+    }
+}
+div.backdrop {
+    --x-zoom: -300px;
+    --y-zoom: -300px;
+
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    background-image: radial-gradient(circle, #fff 0, #fff 120px, #000 250px);
+    background-position: calc(var(--x-zoom) - 640px + 125px) calc(var(--y-zoom) - 480px + 125px);
+    background-repeat: no-repeat;
+    mix-blend-mode: multiply;
+    z-index: 100;
+    animation: backdrop-close 300ms;
+}
+body.vertical div.backdrop {
+    background-position: calc(var(--x-zoom) - 480px + 125px) calc(var(--y-zoom) - 640px + 125px);
+}
+div.backdrop.open {
+    display: block;
+    opacity: 0.5;
+    animation: backdrop-open 300ms;
+}
+[data-popup] {
+    display: none;
+    position: absolute;
+    background-color: white;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 18px;
+    color: black;
+    max-width: 1280px;
+    max-height: 720px;
+    z-index: 101;
+    animation: popup-close 300ms;
+}
+body.vertical [data-popup] {
+    max-width: 720px;
+    max-height: 1280px;
+}
+[data-popup].full { max-width: 1280px !important; max-height: 720px !important; border-radius: 0 !important; }
+body.vertical [data-popup].full { max-width: 720px !important; max-height: 1280px !important; }
+[data-popup].left, [data-popup].right, [data-popup].bottom, [data-popup].top,
+[data-popup].topleft, [data-popup].topright, [data-popup].bottomleft, [data-popup].bottomright,
+[data-popup].center {
+    max-width: 1255px;
+    max-height: 695px;
+}
+body.vertical [data-popup].left, body.vertical [data-popup].right, body.vertical [data-popup].bottom, body.vertical [data-popup].top,
+body.vertical [data-popup].topleft, body.vertical [data-popup].topright, body.vertical [data-popup].bottomleft, body.vertical [data-popup].bottomright,
+body.vertical [data-popup].center {
+    max-width: 695px;
+    max-height: 1255px;
+}
+[data-popup].open {
+    display: block;
+    animation: popup-open 300ms;
+}
+[data-popup] > .close {
+    float: right;
+    font-size: 20px;
+    color: black;
+    background: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: 0 0 13px 13px;
+    shape-outside: circle();
+    border: 0;
+    padding: 0;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    z-index: 102;
+}
+[data-popup].left > .close, [data-popup].right > .close, [data-popup].bottom > .close, [data-popup].top > .close,
+[data-popup].topleft > .close, [data-popup].topright > .close, [data-popup].bottomleft > .close, [data-popup].bottomright > .close,
+[data-popup].center > .close, [data-popup].free > .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: -20px;
+}
+[data-popup].right > .close, [data-popup].bottomright > .close, [data-popup].topright > .close {
+    right: auto;
+    left: 0;
+}
+[data-popup].top > .close, [data-popup].topleft > .close, [data-popup].topright > .close {
+    top: auto;
+    bottom: 0;
+}
+[data-popup].full.left > .close {
+    top: 50%;
+    right: 0 !important;
+    left: auto !important;
+    bottom: auto !important;
+}
+[data-popup].full.right > .close {
+    top: 50%;
+    right: auto !important;
+    left: 0 !important;
+    bottom: auto !important;
+}
+[data-popup].full.top > .close {
+    top: auto !important;
+    right: 50%;
+    left: auto !important;
+    bottom: 0 !important;
+}
+[data-popup].full.bottom > .close {
+    top: 0 !important;
+    right: 50%;
+    left: auto !important;
+    bottom: auto !important;
+}
+[data-popup].left {
+    top: 50%;
+    bottom: auto;
+    left: 0;
+    right: auto;
+    transform-origin: left;
+    width: 600px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transform: translate(0, -50%);
+    /*translate: 0 -50%;*/
+}
+[data-popup].right {
+    top: 50%;
+    bottom: auto;
+    right: 0;
+    left: auto;
+    transform-origin: right;
+    width: 600px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    transform: translate(0, -50%);
+    /*translate: 0 -50%;*/
+}
+[data-popup].top {
+    left: 25px;
+    right: 25px;
+    top: 0;
+    bottom: auto;
+    transform-origin: top;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+[data-popup].bottom {
+    left: 25px;
+    right: 25px;
+    bottom: 0;
+    top: auto;
+    transform-origin: bottom;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+[data-popup].topleft {
+    left: 0;
+    top: 0;
+    right: auto;
+    bottom: auto;
+    transform-origin: top left;
+    border-bottom-right-radius: 20px;
+}
+[data-popup].topright {
+    right: 0;
+    top: 0;
+    left: auto;
+    bottom: auto;
+    transform-origin: top right;
+    border-bottom-left-radius: 20px;
+}
+[data-popup].bottomleft {
+    left: 0;
+    bottom: 0;
+    right: auto;
+    top: auto;
+    transform-origin: bottom left;
+    border-top-right-radius: 20px;
+}
+[data-popup].bottomright {
+    right: 0;
+    bottom: 0;
+    left: auto;
+    top: auto;
+    transform-origin: bottom right;
+    border-top-left-radius: 20px;
+}
+[data-popup].center {
+    left: 50%;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    width: 600px;
+    transform-origin: center;
+    /*translate: -50% -50%;*/
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+}
+[data-popup].free {
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform-origin: center;
+    border-radius: 20px;
+}
+[data-popup].small {
+    width: 300px;
+}
+[data-popup].big {
+    width: 1000px;
+}
+body.vertical [data-popup] { width: 338px }
+body.vertical [data-popup].small { width: 190px }
+body.vertical [data-popup].big { width: 660px }
+[data-popup].top.small, [data-popup].bottom.small,
+[data-popup].top.big, [data-popup].bottom.big {
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, 0);
+    /*translate: -50% 0;*/
+}
+[data-popup].full.left, [data-popup].full.right {
+    width: 50%;
+    top: 0;
+    bottom: 0;
+    /*translate: none !important;*/
+    transform: none !important;
+}
+[data-popup].full.top, [data-popup].full.bottom {
+    left: 0;
+    right: 0;
+    /*translate: none !important;*/
+    transform: none !important;
+}
+
+#menu {
+    width: 300px;
+    height: 50px;
+    position: absolute;
+    background-color: white;
+    color: black;
+    padding: 15px 15px 15px 45px;
+    border-radius: 0 25px 25px 0;
+    z-index: 98;
+    top: 15px;
+    left: 0;
+    background-position: -3px 0;
+    background-size: 40px 48px;
+    background-repeat: no-repeat;
+    transform: translateX(-260px);
+    transition-property: transform, height;
+    transition-duration: 400ms;
+    overflow: hidden;
+}
+#menu::after {
+    content: "+";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 50px;
+    font-weight: 600;
+    font-size: 2rem;
+    text-align: center;
+}
+#menu.open:not(.temp-close) {
+    transform: translateX(0);
+    height: auto;
+}
+#menu.open:not(.temp-close)::after {
+    content: "-";
+}
+#menu > ul {
+    padding: 0;
+    margin: 10px 0 0 20px;
+}
+#menu li > * {
+    vertical-align: text-top;
+}
+#menu button {
+    background-color: transparent;
+    color: inherit;
+    border: 0;
+    padding: 3px 0;
+    margin-bottom: 2px;
+    text-align: left;
+}
+body.chs #menu { background-image: url("../images/CHS.png"); color: #104b88 }
+body.cnt #menu { background-image: url("../images/CNT.png"); color: #28401d }
+body.lgg #menu { background-image: url("../images/LGG.png"); color: #6F5506 }
+body.mat #menu { background-image: url("../images/MAT.png"); color: #7b0f00 }
+
+[data-zoom-imagem] {
+    transition-property: transform;
+    transition-duration: 350ms;
+}
+
+.creditos {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px;
+    font-size: 10px;
+    margin: 11px;
+    max-width: fit-content;
+
+    bottom: 0;
+    right: 0;
+}
+.creditos.bottomleft { bottom: 0; left: 0; }
+.creditos.bottomright { bottom: 0; right: 0; }
+.creditos.topleft { top: 0; left: 0; bottom: auto; }
+.creditos.topright { top: 0; right: 0; bottom: auto; }
+
+[data-slides] > [data-slide] {
+    opacity: 0;
+    transition: opacity 300ms;
+}
+[data-slides] > [data-slide]:has(~ [data-slide].ativo) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 1;
+}
+[data-slides] > [data-slide].ativo {
+    opacity: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+[data-slides] .slide-left, [data-slides] .slide-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 56px;
+    background-color: white;
+    color: black;
+    font-size: 2rem;
+    text-align: center;
+    line-height: 50px;
+    z-index: 99;
+    border: 0;
+    vertical-align: middle;
+}
+[data-slides] .slide-left {
+    left: 0;
+    border-radius: 0 50% 50% 0;
+}
+[data-slides] .slide-right {
+    right: 0;
+    border-radius: 50% 0 0 50%;
+}
+
+[data-collapse] { display: none }
+[data-collapse][data-collapse-tipo="zoom"] { display: block; transform: scale(0); transition: transform 300ms; height: 0 }
+[data-collapse].open { transform: scale(1); display: block; height: auto }
+ul { margin: 0 0 0 25px; padding: 0 }
+.principal, [data-slides] > [data-slide] {
+    display: block;
+    aspect-ratio: 1920 / 1080;
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    margin: auto;
+    overflow: hidden;
+}
+body.vertical .principal, body.vertical [data-slides] > [data-slide] {
+    aspect-ratio: 1080 / 1920;
+    width: 720px;
+    height: 1280px;
+}
+.centralizar {
+    display: grid;
+    place-items: center;
+}
+.centralizar > div { margin: auto; }
+.colunas-horizontal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    height: 100%;
+}
+.colunas-vertical {
+    display: grid;
+    grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+    height: 100%;
+}
+.principal > .colunas-horizontal > div {
+    height: 0;
+    min-height: 100%;
+}
+
+h1 {
+    color: white;
+    padding: 0.5rem 1rem 0.8rem;
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 0.5em;
+    width: fit-content;
+    font-size: 1.3em;
+    font-weight: 600;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
+}
+body.filosofia h1 { background-color: #7b4b68; }
+body.geografia h1 { background-color: #64260b; }
+body.historia h1 { background-color: #b44017; }
+body.sociologia h1 { background-color: #056664; }
+body.biologia h1 { background-color: #158d3b; }
+body.fisica h1 { background-color: #e7442f; }
+body.quimica h1 { background-color: #852758; }
+body.artes h1 { background-color: #704695; }
+body.portugues h1 { background-color: #29327e; }
+body.redacao h1 { background-color: #e82d88; }
+body.matematica h1 { background-color: #e30613; }
+
+
+table {
+    font-size: 0.8em;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 2mm;
+    border: solid 1px;
+}
+
+thead {
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+body.filosofia thead { background-color: #7b4b68; }
+body.geografia thead { background-color: #64260b; }
+body.historia thead { background-color: #b44017; }
+body.sociologia thead { background-color: #056664; }
+body.biologia thead { background-color: #158d3b; }
+body.fisica thead { background-color: #e7442f; }
+body.quimica thead { background-color: #852758; }
+body.artes thead { background-color: #704695; }
+body.portugues thead { background-color: #29327e; }
+body.redacao thead { background-color: #e82d88; }
+body.matematica thead { background-color: #e30613; }
+
+body.filosofia td, body.filosofia th { border: solid 2px #7b4b68; }
+body.geografia td, body.geografia th { border: solid 2px #64260b; }
+body.historia td, body.historia th { border: solid 2px #b44017; }
+body.sociologia td, body.sociologia th { border: solid 2px #056664; }
+body.biologia td, body.biologia th { border: solid 2px #158d3b; }
+body.fisica td, body.fisica th { border: solid 2px #e7442f; }
+body.quimica td, body.quimica th { border: solid 2px #852758; }
+body.artes td, body.artes th body.artes th { border: solid 2px #704695; }
+body.portugues td, body.portugues th { border: solid 2px #29327e; }
+body.redacao td, body.redacao th { border: solid 2px #e82d88; }
+body.matematica td, body.matematica th { border: solid 2px #e30613; }
+
+th:not(:first-child) {
+    border-left-color: white !important;
+    border-left: solid 2px !important;
+}
+
+th:not(:last-child) {
+    border-right-color: white !important;
+    border-right: solid 2px !important;
+}
+
+.fonte {
+    text-align: right;
+    margin-left: 15%;
+    font-family: serif !important;
+    font-size: 0.8em;
+}
+
+.fonte .bold {
+    font-family: serif;
+}
+
+.bold {
+    font-weight: bold;
+}

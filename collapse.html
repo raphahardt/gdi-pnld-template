@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico</title>
+    <link rel="stylesheet" href="./resources/styles/base.css">
+    <link rel="stylesheet" href="./resources/styles/styles.css">
+</head>
+<body class="vertical">
+<!-- Conteúdo principal -->
+<div class="principal" style="background: gray">
+    <!--
+    Exemplo básico:
+     -->
+    <!-- Item que ao clicar mostra o conteúdo -->
+    <h1 class="titulo" data-collapse-open="texto-1">Clique para abrir a caixa de texto</h1>
+
+    <!--
+    Texto que vai ser mostrado. O data-collapse é obrigatório. A classe pode ser qualquer coisa
+
+    Outros tipos de collapse:
+        data-collapse-tipo="zoom": Mostra aumentando o conteúdo (zoom)
+        data-collapse-tipo="slide": Mostra deslizando o conteúdo pra baixo
+    -->
+    <div id="texto-1" data-collapse data-collapse-tipo="zoom" class="textoHover">
+        <p>Conteúdo do texto hover</p>
+    </div>
+
+
+
+    <!--
+    Exemplo usando grupos:
+
+   Os grupos servem para que apenas um dos conteúdos seja mostrado por vez, ou seja,
+   quando clica pra abrir um, todos os outros que estão no grupo fecham.
+   -->
+
+    <div data-collapse-grupo>
+        <h1 class="titulo" data-collapse-open="grupo-texto-1">Abrir 1</h1>
+        <div id="grupo-texto-1" data-collapse data-collapse-tipo="zoom" class="textoHover">
+            <p>Conteúdo 1</p>
+        </div>
+        <h1 class="titulo" data-collapse-open="grupo-texto-2">Abrir 2</h1>
+        <div id="grupo-texto-2" data-collapse data-collapse-tipo="zoom" class="textoHover">
+            <p>Conteúdo 2</p>
+        </div>
+        <h1 class="titulo" data-collapse-open="grupo-texto-3">Abrir 3</h1>
+        <div id="grupo-texto-3" data-collapse data-collapse-tipo="zoom" class="textoHover">
+            <p>Conteúdo 3</p>
+        </div>
+    </div>
+</div>
+
+<!-- Javascripts necessários -->
+<script src="./resources/scripts/floating-ui.js"></script>
+<script src="./resources/scripts/scripts.js"></script>
+</body>
+</html>

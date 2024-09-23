@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico</title>
+    <link rel="stylesheet" href="./resources/styles/base.css">
+    <link rel="stylesheet" href="./resources/styles/styles.css">
+</head>
+<body class="chs geografia">
+<!-- Conteúdo principal -->
+<div class="principal">
+<!--    <div data-zoom-imagem-->
+<!--         data-creditos="Grafite de Paulo Leminski onde podemos observar a intertextualidade entre imagem e poesia na arte urbana"-->
+<!--         data-creditos-posicao="bottomright"-->
+<!--         style="width: 100%; height: 100%; background-image: url('./resources/images/click-hand.png'), linear-gradient(#ab208e, #29327e); background-repeat: repeat">-->
+
+<!--    </div>-->
+    <div id="menu">
+        <div>Você pode navegar através dos links abaixo:</div>
+        <ul data-menu></ul>
+    </div>
+
+    <div class="colunas-vertical">
+        <div class="colunas-horizontal">
+            <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A delectus ea enim ipsa magnam magni nam nihil quasi reprehenderit tempore.</div>
+            <div class="colunas-vertical">
+                <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A delectus ea enim ipsa magnam magni nam nihil quasi reprehenderit tempore.</div>
+                <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis earum iure modi quibusdam saepe! Accusantium aliquam dolor porro similique suscipit.</div>
+            </div>
+        </div>
+        <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis earum iure modi quibusdam saepe! Accusantium aliquam dolor porro similique suscipit.</div>
+    </div>
+
+    <!-- Item clicável que abre o popup -->
+    <h1 style="position: absolute; left: 300px; top: 200px" data-popup-open="modal-1" data-click="Clique 1" data-zoom="350,220,2.5">Clique aqui para abrir o modal</h1>
+    <h1 style="position: absolute; left: 600px; top: 400px" data-popup-open="modal-2" data-click="Clique 2" data-zoom="680,420,2">Clique aqui para abrir o modal menor</h1>
+    <h1 style="position: absolute; left: 400px; top: 500px" data-popup-open="modal-3" data-click="Clique 3">Clique aqui para abrir o modal 2</h1>
+
+    <!-- Exemplo de popup. Ele tem que ficar agora DENTRO da div principal
+
+    Você pode combinar tamanhos, posições e cores como quiser.
+    Escolha um de cada categoria e adicione à classe do popup. Por exemplo, "full left" ou "small topright" ou "big center".
+
+    Tamanhos disponívels:
+    - full
+    - small
+    - big
+    - (deixar sem) - padrão
+
+    Posições disponíveis:
+    - left
+    - right
+    - top
+    - bottom
+    - topleft
+    - topright
+    - bottomleft
+    - bottomright
+    - center
+    - free (para posicionar manualmente pelo style="left: x; top: y")
+    - (deixar sem) - padrão, faz com que o popup ocupe a tela inteira
+
+    Cores:
+    - a vontade da classe que você quiser, ou até usando style.
+
+    -->
+    <div data-popup id="modal-1" class="right">
+        Lorem ipsum dolor sit amet, consectetur <span style="color: blue" data-popup-close>adipisicing</span> elit. A blanditiis cumque deserunt earum eligendi id modi, nisi
+        officia provident quidem quisquam quos recusandae
+        saepe ut, vitae. Ad at consectetur culpa debitis, deserunt earum facilis itaque laboriosam magnam neque non numquam, optio perferendis perspiciatis provident quas qui
+        reiciendis rem repellat rerum sed sunt unde vitae! A autem beatae blanditiis consectetur consequatur deleniti dolores ducimus error eveniet excepturi fugit illo
+        impedit in ipsa magni modi natus, nihil nobis pariatur quia quis rem sint tempora tempore tenetur veniam veritatis vitae voluptas voluptate voluptates. Accusantium
+        dolores eaque facere facilis officia sapiente. Eos, itaque, voluptas!
+
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab at culpa dignissimos dolorem hic molestiae ullam voluptas. Architecto error iusto nihil tempora. Eligendi,
+        esse odio! Accusamus ad consectetur dignissimos eaque error illum inventore labore maiores, possimus quam quas repellat reprehenderit saepe similique sunt velit
+        voluptatem. Ab alias aliquam aliquid amet animi aperiam consectetur debitis distinctio dolor error, esse est eum eveniet facere fugit hic ipsum itaque labore magni
+        maxime nisi, omnis porro quae quidem quod rem repudiandae saepe similique totam, veniam! Ab adipisci assumenda cum delectus, distinctio doloremque error excepturi illo
+        illum iure natus neque nihil nostrum quia recusandae reprehenderit sapiente soluta, voluptate! A ab accusantium aliquam at commodi, culpa cum dolor dolore eligendi
+        error eum exercitationem harum inventore iste laudantium magnam maiores, molestiae molestias mollitia nobis numquam obcaecati officiis perferendis porro quam quibusdam
+        quidem quo quod quos repellendus sequi sint soluta ut velit veniam voluptates voluptatum. Ab accusantium assumenda at cum delectus dignissimos distinctio dolor,
+        doloribus et, harum impedit ipsum minima neque odio placeat porro, quam qui quis ratione reiciendis similique sit suscipit tempora. Deserunt fugiat impedit itaque
+        necessitatibus repellendus totam. Aperiam atque blanditiis dolorum ducimus error esse fuga itaque officiis, quaerat quis quos rem unde ut voluptas, voluptate.
+    </div>
+    <div data-popup id="modal-2" class="free small" style="left: 40px; top: 200px">
+        Lorem ipsum dolor sit amet, <span style="color: blue" data-popup-open="modal-1" data-popup-close data-zoom="40,80">consectetur</span> adipisicing elit. Cum dolorem
+        eius fuga hic in laboriosam pariatur possimus provident quam quos tempore temporibus, veritatis voluptatem. At blanditiis illo porro quia voluptate.
+    </div>
+    <div data-popup id="modal-3" class="right">
+        <div class="colunas-horizontal">
+            <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A delectus ea enim ipsa magnam magni nam nihil quasi reprehenderit tempore.</div>
+            <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis earum iure modi quibusdam saepe! Accusantium aliquam dolor porro similique suscipit.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Javascripts necessários -->
+<script src="./resources/scripts/floating-ui.js"></script>
+<script src="./resources/scripts/scripts.js"></script>
+</body>
+</html>
