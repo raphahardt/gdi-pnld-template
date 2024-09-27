@@ -19,6 +19,7 @@ if (!htmlCode) {
 
 const selectedPath = path.dirname(indexPath);
 const isVertical = htmlCode.match(/vertical/);
+const isCarousel = htmlCode.match(/Carrossel/);
 
 const clickables = htmlCode.match(/\b(data-click|data-slide)\b/g);
 
@@ -41,13 +42,16 @@ const timesnapOptions = {
   outputDirectory: path.resolve(selectedPath, 'pdf'),
 };
 
+console.log("Gerando as imagens...");
+
 await timesnap({
   ...timesnapOptions,
   url: `file:///${indexPath}`,
   outputPattern: '001.png',
 });
+console.log("Inicial gerado");
 
-for (let i = 0; i < clickables.length; i++) {
+for (let i = isCarousel ? 1 : 0; i < clickables.length; i++) {
   const paddedIndex = String(i + 2).padStart(3, '0');
 
   await timesnap({
@@ -71,6 +75,8 @@ for (let i = 0; i < clickables.length; i++) {
       })
     },
   });
+
+  console.log(`Link ${i + 1} gerado`);
 }
 
 await timesnap({
@@ -79,7 +85,9 @@ await timesnap({
   outputPattern: `999.png`,
 });
 
-console.log("Gerado as imagens");
+console.log("Imagens geradas");
+
+console.log("Gerando PDF...");
 
 // gerando o pdf
 const pdfPath = path.resolve(selectedPath, path.basename(selectedPath) + '.pdf');

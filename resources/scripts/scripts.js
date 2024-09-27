@@ -43,13 +43,18 @@ if (menu) {
 
 document.querySelectorAll("[data-click]").forEach((item) => {
   // faz com que o item seja focável
-  item.tabIndex = 0;
+  //item.tabIndex = 0;
 
   document.querySelectorAll("ul[data-menu]").forEach((menu) => {
     const menuItemLi = document.createElement("li");
     const menuItem = document.createElement("button");
     menuItem.classList.add("menu-item");
-    menuItem.innerText = item.dataset.click;
+    if (item.dataset.click.match(/<span.*<\/span>/)) {
+      menuItem.innerHTML = item.dataset.click.replace(/<(?!\/?span).*?>/g, ""); // retira todas as tags q não sejam span
+    } else {
+      menuItem.innerText = item.dataset.click;
+    }
+
     menuItem.addEventListener("click", (event) => {
       item.dispatchEvent(new Event("click"));
     });

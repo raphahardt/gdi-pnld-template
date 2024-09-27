@@ -555,10 +555,9 @@ th:not(:last-child) {
     font-size: 0.8em;
 }
 
-.fonte .bold {
-    font-family: serif;
-}
-
 .bold {
     font-weight: bold;
+}
+.italic {
+    font-style: italic;
 }
