@@ -5,3 +5,5 @@ npm-debug.*
 .idea
 
 projetos/
+*.zip
+.last_cwd

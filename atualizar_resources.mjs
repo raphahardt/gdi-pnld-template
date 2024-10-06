@@ -1,21 +1,60 @@
 import inquirer from 'inquirer';
-import fileSelector from 'inquirer-file-selector';
 import path from 'path';
 import fs from 'fs';
 import { copiarRecursos } from "./_modulos/arqhtml.mjs";
+import folderPrompt from "./_modulos/folderPrompt.mjs";
+import { getLastFolder, setLastFolder } from "./_modulos/lastFolder.mjs";
 
-const filePath = await fileSelector({
-  message: 'Selecione a pasta do projeto que vai atualizar os resources:',
-  match: (file) => file.name === 'index.html',
-  hideNonMatch: true,
-})
+function* iterateFolders(folder) {
+  if (fs.existsSync(path.join(folder, "atualizar_resources.mjs"))) {
+    return;
+  }
 
-const finalFolder = path.dirname(filePath);
+  if (fs.existsSync(path.join(folder, "resources")) && fs.existsSync(path.join(folder, "index.html"))) {
+    const html = fs.readFileSync(path.join(folder, "index.html"), { encoding: "utf8" });
 
-if ((await fs.promises.readdir(path.resolve(finalFolder, 'resources'))).length === 0) {
-  console.log('Essa pasta não tem resources para serem atualizados');
+    if (html.includes("/floating-ui.js")) {
+      yield folder;
+      return;
+    }
+  }
+
+  const folders = fs.readdirSync(folder);
+
+  for (const f of folders) {
+    const fullPath = path.join(folder, f);
+
+    if (fs.statSync(fullPath).isDirectory()) {
+      if (fs.existsSync(path.join(fullPath, "atualizar_resources.mjs"))) {
+        continue;
+      }
+
+      if (fs.existsSync(path.join(fullPath, "resources")) && fs.existsSync(path.join(fullPath, "index.html"))) {
+        const html = fs.readFileSync(path.join(fullPath, "index.html"), { encoding: "utf8" });
+
+        if (html.includes("/floating-ui.js")) {
+          yield fullPath;
+        }
+      }
+
+      yield* iterateFolders(fullPath);
+    }
+  }
+}
+
+const lastFolder = getLastFolder();
+
+const finalFolder = await folderPrompt({
+  message: "Selecione a pasta do projeto que vai atualizar os resources:",
+  startFolder: lastFolder,
+});
+
+if (!finalFolder) {
+  console.log('Operação cancelada');
   process.exit(0);
 }
+
+setLastFolder(finalFolder);
 
 const confirm = await inquirer.prompt({
   type: 'confirm',
@@ -28,6 +67,13 @@ if (!confirm.confirm) {
   process.exit(0);
 }
 
-await copiarRecursos(import.meta.dirname, finalFolder);
+let i = 0;
+for await (const folder of iterateFolders(finalFolder)) {
+  await copiarRecursos(import.meta.dirname, folder);
+  console.log('Resources atualizados: ' + folder);
+  i++;
+}
 
-console.log('Resources atualizados');
+if (i === 0) {
+  console.log('Nenhum OED encontrado');
+}

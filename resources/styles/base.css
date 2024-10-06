@@ -325,7 +325,7 @@ body.vertical [data-popup].big { width: 660px }
     color: black;
     padding: 15px 15px 15px 45px;
     border-radius: 0 25px 25px 0;
-    z-index: 98;
+    z-index: 102;
     top: 15px;
     left: 0;
     background-position: -3px 0;
@@ -336,24 +336,57 @@ body.vertical [data-popup].big { width: 660px }
     transition-duration: 400ms;
     overflow: hidden;
 }
-#menu::after {
-    content: "+";
+#menu::before {
+    content: "";
     position: absolute;
     top: 0;
-    right: 0;
+    left: -3px;
     width: 40px;
-    height: 50px;
-    font-weight: 600;
-    font-size: 2rem;
-    text-align: center;
+    height: 48px;
+    background-position: 0 0;
+    background-size: 40px 48px;
+    background-repeat: no-repeat;
 }
-#menu.open:not(.temp-close) {
+/*#menu::after {*/
+/*    content: "+";*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    width: 40px;*/
+/*    height: 50px;*/
+/*    font-weight: 600;*/
+/*    font-size: 2rem;*/
+/*    text-align: center;*/
+/*}*/
+#menu.bottomright, #menu.topright {
+    left: auto;
+    right: 0;
+    border-radius: 25px 0 0 25px;
+    padding: 15px;
+    transform: translateX(260px);
+}
+#menu.bottomright::after, #menu.topright::after {
+    left: 0;
+    right: auto;
+}
+#menu.bottomright::before, #menu.topright::before {
+    left: auto;
+    right: 0;
+    transform: scaleX(-1);
+}
+#menu.bottomright, #menu.bottomleft {
+    top: auto;
+    bottom: 15px;
+}
+/*#menu.open:not(.temp-close) {*/
+#menu.open, #menu.temp-close {
     transform: translateX(0);
     height: auto;
 }
-#menu.open:not(.temp-close)::after {
-    content: "-";
-}
+/*#menu.open:not(.temp-close)::after {*/
+/*#menu.open::after, #menu.temp-close::after {*/
+/*    content: "-";*/
+/*}*/
 #menu > ul {
     padding: 0;
     margin: 10px 0 0 20px;
@@ -369,10 +402,26 @@ body.vertical [data-popup].big { width: 660px }
     margin-bottom: 2px;
     text-align: left;
 }
-body.chs #menu { background-image: url("../images/CHS.png"); color: #104b88 }
-body.cnt #menu { background-image: url("../images/CNT.png"); color: #28401d }
-body.lgg #menu { background-image: url("../images/LGG.png"); color: #6F5506 }
-body.mat #menu { background-image: url("../images/MAT.png"); color: #7b0f00 }
+body.chs #menu { color: #104b88 }
+body.cnt #menu { color: #28401d }
+body.lgg #menu { color: #6F5506 }
+body.mat #menu { color: #7b0f00 }
+body.chs #menu::before { background-image: url("../images/CHS.png"); }
+body.cnt #menu::before { background-image: url("../images/CNT.png"); }
+body.lgg #menu::before { background-image: url("../images/LGG.png"); }
+body.mat #menu::before { background-image: url("../images/MAT.png"); }
+
+body.filosofia #menu.temp-close button.active { color: #7b4b68; font-weight: bolder; }
+body.geografia #menu.temp-close button.active { color: #64260b; font-weight: bolder; }
+body.historia #menu.temp-close button.active { color: #b44017; font-weight: bolder; }
+body.sociologia #menu.temp-close button.active { color: #056664; font-weight: bolder; }
+body.biologia #menu.temp-close button.active { color: #158d3b; font-weight: bolder; }
+body.fisica #menu.temp-close button.active { color: #e7442f; font-weight: bolder; }
+body.quimica #menu.temp-close button.active { color: #852758; font-weight: bolder; }
+body.artes #menu.temp-close button.active { color: #704695; font-weight: bolder; }
+body.portugues #menu.temp-close button.active { color: #29327e; font-weight: bolder; }
+body.redacao #menu.temp-close button.active { color: #e82d88; font-weight: bolder; }
+body.matematica #menu.temp-close button.active { color: #e30613; font-weight: bolder; }
 
 [data-zoom-imagem] {
     transition-property: transform;
@@ -497,6 +546,23 @@ body.portugues h1 { background-color: #29327e; }
 body.redacao h1 { background-color: #e82d88; }
 body.matematica h1 { background-color: #e30613; }
 
+
+h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
+}
+body.filosofia h2 {color: #7b4b68; }
+body.geografia h2 {color: #64260b; }
+body.historia h2 {color: #b44017; }
+body.sociologia h2 {color: #056664; }
+body.biologia h2 {color: #158d3b; }
+body.fisica h2 {color: #e7442f; }
+body.quimica h2 {color: #852758; }
+body.artes h2 {color: #704695; }
+body.portugues h2 {color: #29327e; }
+body.redacao h2 {color: #e82d88; }
+body.matematica h2 {color: #e30613; }
 
 table {
     font-size: 0.8em;

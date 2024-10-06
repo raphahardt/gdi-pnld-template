@@ -34,28 +34,52 @@ resizeObserver.observe(document.body);
 const menu = document.getElementById("menu");
 
 if (menu) {
-  menu.addEventListener("click", (event) => {
-    if (event.target === menu) {
-      menu.classList.toggle("open");
-    }
-  });
+  menu.classList.add("open");
+  // menu.addEventListener("click", (event) => {
+  //   if (event.target === menu) {
+  //     menu.classList.toggle("open");
+  //   }
+  // });
 }
+
+const clickables = new Map();
 
 document.querySelectorAll("[data-click]").forEach((item) => {
   // faz com que o item seja focável
   //item.tabIndex = 0;
+  let action;
+  if (item.dataset.popupOpen) {
+    action = { action: "popup", id: item.dataset.popupOpen };
+  }
+  if (item.dataset.tooltipOpen) {
+    action = { action: "tooltip", id: item.dataset.tooltipOpen };
+  }
+  clickables.set(`${action.action}${action.id}`, { menuItems: [], action });
 
   document.querySelectorAll("ul[data-menu]").forEach((menu) => {
     const menuItemLi = document.createElement("li");
     const menuItem = document.createElement("button");
     menuItem.classList.add("menu-item");
+    menuItem.classList.add(`m-${action.action}${action.id}`);
     if (item.dataset.click.match(/<span.*<\/span>/)) {
       menuItem.innerHTML = item.dataset.click.replace(/<(?!\/?span).*?>/g, ""); // retira todas as tags q não sejam span
     } else {
       menuItem.innerText = item.dataset.click;
     }
 
+    clickables.get(`${action.action}${action.id}`).menuItems.push(menuItem);
+
     menuItem.addEventListener("click", (event) => {
+      // menu.querySelectorAll("button.active").forEach((c) => {
+      //   c.classList.remove("active");
+      // });
+      // menuItem.classList.add("active");
+      if (action.action === "popup") {
+        const openedPopup = document.querySelector('[data-popup].open');
+        if (openedPopup) {
+          closePopup(openedPopup);
+        }
+      }
       item.dispatchEvent(new Event("click"));
     });
 
@@ -238,6 +262,16 @@ backdrop.classList.add('backdrop');
 document.querySelector('.principal').prepend(backdrop);
 
 function openPopup(handle, popup) {
+  const ck = clickables.get(`popup${handle.dataset.popupOpen}`);
+  if (ck) {
+    menu.querySelectorAll("button.active").forEach((c) => {
+      c.classList.remove("active");
+    });
+    ck.menuItems.forEach((c) => {
+      c.classList.add("active");
+    });
+  }
+
   if (backdrop.classList.contains('open')) {
     if (handle.hasAttribute('data-popup-close')) {
       const openedPopup = handle.closest('[data-popup].open');
