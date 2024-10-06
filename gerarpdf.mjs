@@ -79,12 +79,6 @@ for (let i = isCarousel ? 1 : 0; i < clickables.length; i++) {
   console.log(`Link ${i + 1} gerado`);
 }
 
-await timesnap({
-  ...timesnapOptions,
-  url: `file:///${indexPath}#m`,
-  outputPattern: `999.png`,
-});
-
 console.log("Imagens geradas");
 
 console.log("Gerando PDF...");
