@@ -20,7 +20,7 @@ const MATERIAS = [
 ]
 
 /**
- * @type {{nome: string, mat: {area: string, materia: string}, vertical: boolean, tipo: string}}
+ * @type {{nome: string, mat: {area: string, materia: string}, vertical: boolean, tipo: string, titulo: string}}
  */
 const infos = await inquirer.prompt([
   {
@@ -48,7 +48,12 @@ const infos = await inquirer.prompt([
     choices: ['Infográfico', 'Mapa', 'Carrossel'],
     message: 'Escolha o tipo de html:',
     name: 'tipo',
-  }
+  },
+  {
+    type: 'input',
+    message: 'Qual o título:',
+    name: 'titulo',
+  },
 ]);
 
 const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.area} ${infos.mat.materia}`;
@@ -65,7 +70,7 @@ if (infos.tipo === "Carrossel") {
 console.log("Gerando HTML...");
 
 await criarPastas(import.meta.dirname, generateFolder, htmlInfo.styles || '');
-await criarHtml(import.meta.dirname, generateFolder, infos.tipo, bodyClass, htmlInfo.conteudo);
+await criarHtml(import.meta.dirname, generateFolder, infos.titulo, bodyClass, htmlInfo.conteudo);
 
 if (htmlInfo.copyFiles) {
   for (const file of htmlInfo.copyFiles) {

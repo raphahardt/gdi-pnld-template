@@ -3,6 +3,13 @@ import fileSelector from 'inquirer-file-selector';
 import path from "path";
 
 const CONTEUDO_TEMPLATE = `
+    <div id="menu">
+        <div>Acesse os <span class="italic">links</span> para navegar e ampliar seus conhecimentos:</div>
+        <ul data-menu></ul>
+    </div>
+
+    <h1 class="tituloPrincipal">{titulo}</h1>
+
     {clicaveis}
     
     {bottom}
@@ -40,6 +47,12 @@ export async function gerarInfMap(finalFolder) {
     position: relative;
     width: 100%;
     height: 100%;
+}
+.tituloPrincipal {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
 }
 `;
 

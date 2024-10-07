@@ -22,6 +22,12 @@ const STYLES = `
     padding: 10px;
     box-sizing: border-box;
 }
+.tituloPrincipal {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
+}
 `
 
 const CONTEUDO_TEMPLATE = `<div data-slides>
@@ -30,6 +36,14 @@ const CONTEUDO_TEMPLATE = `<div data-slides>
 
 const SLIDE_TEMPLATE = `
         <div data-slide>
+            {image}
+            {legend}
+        </div>`;
+
+const SLIDE_TEMPLATE_FIRST = `
+        <div data-slide>
+             <h1 class="tituloPrincipal">{titulo}</h1>
+
             {image}
             {legend}
         </div>`
@@ -91,7 +105,7 @@ export async function gerarCarousel(finalFolder) {
     const legend = slidesInfo[`legenda${index}`] ?
       LEGEND_TEMPLATE.replace('{texto}', slidesInfo[`legenda${index}`]) : '';
 
-    return SLIDE_TEMPLATE
+    return (index === 0 ? SLIDE_TEMPLATE_FIRST : SLIDE_TEMPLATE)
     .replace('{image}', image)
     .replace('{legend}', legend);
   });
