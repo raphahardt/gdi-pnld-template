@@ -27,6 +27,7 @@ const STYLES = `
     left: 50%;
     top: 20px;
     transform: translateX(-50%);
+    text-align: center;
 }
 `
 
@@ -42,9 +43,8 @@ const SLIDE_TEMPLATE = `
 
 const SLIDE_TEMPLATE_FIRST = `
         <div data-slide>
-             <h1 class="tituloPrincipal">{titulo}</h1>
-
             {image}
+            <h1 class="tituloPrincipal">{titulo}</h1>
             {legend}
         </div>`
 

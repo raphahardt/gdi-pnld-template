@@ -47,7 +47,7 @@ const clickables = new Map();
 document.querySelectorAll("[data-click]").forEach((item) => {
   // faz com que o item seja focável
   //item.tabIndex = 0;
-  let action;
+  let action = { action: "none", id: "" };
   if (item.dataset.popupOpen) {
     action = { action: "popup", id: item.dataset.popupOpen };
   }
@@ -462,6 +462,14 @@ if (hash) {
         setTimeout(() => {
           window.itemClicked = hash;
         }, 300);
+      } else {
+        // é slide?
+        const slide = document.querySelectorAll("[data-slide]")[clickIndex - 1];
+
+        if (slide) {
+          document.querySelector("[data-slide].ativo").classList.remove("ativo");
+          slide.classList.add("ativo");
+        }
       }
     }
   }

@@ -19,7 +19,7 @@ if (!htmlCode) {
 
 const selectedPath = path.dirname(indexPath);
 const isVertical = htmlCode.match(/vertical/);
-const isCarousel = htmlCode.match(/Carrossel/);
+const isCarousel = htmlCode.match(/data\-slide/);
 
 const clickables = htmlCode.match(/\b(data-click|data-slide)\b/g);
 

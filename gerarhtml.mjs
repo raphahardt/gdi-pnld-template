@@ -58,7 +58,7 @@ const infos = await inquirer.prompt([
 
 const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.area} ${infos.mat.materia}`;
 
-const generateFolder = path.resolve(import.meta.dirname, 'projetos', `V1-PNLD2026-ESC-${infos.nome}`);
+const generateFolder = path.resolve(import.meta.dirname, 'projetos', `V2-PNLD2026-ESC-${infos.nome}`);
 
 let htmlInfo;
 if (infos.tipo === "Carrossel") {

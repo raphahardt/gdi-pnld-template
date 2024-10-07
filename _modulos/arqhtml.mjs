@@ -14,6 +14,9 @@ export async function copiarRecursos(fromFolder, finalFolder) {
 
 export async function criarHtml(fromFolder, finalFolder, titulo, bodyClass, conteudo) {
   let finalHtml = await fs.promises.readFile(path.resolve(fromFolder, '_template.html'), 'utf-8');
+
+  conteudo = conteudo.replace(/\{titulo\}/g, titulo);
+
   finalHtml = finalHtml
   .replace(/\{titulo\}/g, titulo)
   .replace(/\{bodyclass\}/g, bodyClass)

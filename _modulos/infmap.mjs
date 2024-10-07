@@ -53,6 +53,7 @@ export async function gerarInfMap(finalFolder) {
     left: 50%;
     top: 20px;
     transform: translateX(-50%);
+    text-align: center;
 }
 `;
 
