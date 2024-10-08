@@ -402,6 +402,9 @@ body.vertical [data-popup].big { width: 660px }
     margin-bottom: 2px;
     text-align: left;
 }
+#menu > div:first-child {
+    width: 200px;
+}
 body.chs #menu { color: #104b88 }
 body.cnt #menu { color: #28401d }
 body.lgg #menu { color: #6F5506 }

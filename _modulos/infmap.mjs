@@ -4,7 +4,7 @@ import path from "path";
 
 const CONTEUDO_TEMPLATE = `
     <div id="menu">
-        <div>Acesse os <span class="italic">links</span> para navegar e ampliar seus conhecimentos:</div>
+        <div>Acesse os <span class="italic">links</span> abaixo para navegar e ampliar seus conhecimentos:</div>
         <ul data-menu></ul>
     </div>
 

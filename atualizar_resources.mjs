@@ -1,46 +1,8 @@
 import inquirer from 'inquirer';
-import path from 'path';
-import fs from 'fs';
+
 import { copiarRecursos } from "./_modulos/arqhtml.mjs";
 import folderPrompt from "./_modulos/folderPrompt.mjs";
-import { getLastFolder, setLastFolder } from "./_modulos/lastFolder.mjs";
-
-function* iterateFolders(folder) {
-  if (fs.existsSync(path.join(folder, "atualizar_resources.mjs"))) {
-    return;
-  }
-
-  if (fs.existsSync(path.join(folder, "resources")) && fs.existsSync(path.join(folder, "index.html"))) {
-    const html = fs.readFileSync(path.join(folder, "index.html"), { encoding: "utf8" });
-
-    if (html.includes("/floating-ui.js")) {
-      yield folder;
-      return;
-    }
-  }
-
-  const folders = fs.readdirSync(folder);
-
-  for (const f of folders) {
-    const fullPath = path.join(folder, f);
-
-    if (fs.statSync(fullPath).isDirectory()) {
-      if (fs.existsSync(path.join(fullPath, "atualizar_resources.mjs"))) {
-        continue;
-      }
-
-      if (fs.existsSync(path.join(fullPath, "resources")) && fs.existsSync(path.join(fullPath, "index.html"))) {
-        const html = fs.readFileSync(path.join(fullPath, "index.html"), { encoding: "utf8" });
-
-        if (html.includes("/floating-ui.js")) {
-          yield fullPath;
-        }
-      }
-
-      yield* iterateFolders(fullPath);
-    }
-  }
-}
+import { getLastFolder, setLastFolder, iterateFolders } from "./_modulos/lastFolder.mjs";
 
 const lastFolder = getLastFolder();
 
