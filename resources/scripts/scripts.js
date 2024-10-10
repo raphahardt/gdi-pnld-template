@@ -54,6 +54,9 @@ document.querySelectorAll("[data-click]").forEach((item) => {
   if (item.dataset.tooltipOpen) {
     action = { action: "tooltip", id: item.dataset.tooltipOpen };
   }
+  if (item.dataset.collapseToggle) {
+    action = { action: "collapse", id: item.dataset.collapseToggle };
+  }
   clickables.set(`${action.action}${action.id}`, { menuItems: [], action });
 
   document.querySelectorAll("ul[data-menu]").forEach((menu) => {
@@ -82,6 +85,11 @@ document.querySelectorAll("[data-click]").forEach((item) => {
       }
       item.dispatchEvent(new Event("click"));
     });
+
+    // não mostrar itens de collapse no menu
+    if (action.action === "collapse") {
+      menuItemLi.style.display = "none";
+    }
 
     menuItemLi.append(menuItem);
     menu.append(menuItemLi);
@@ -222,36 +230,96 @@ if (document.querySelector("[data-slides]")) {
 }
 
 // detecção dos acordeões
-function showCollapse(handle, content) {
+function showCollapse(content) {
+  const ck = clickables.get(`collapse${content.id}`);
+  if (ck && !menu.querySelector("button.active")) {
+    menu.querySelectorAll("button.active").forEach((c) => {
+      c.classList.remove("active");
+    });
+    ck.menuItems.forEach((c) => {
+      c.classList.add("active");
+    });
+  }
+
   content.classList.add("open");
-  handle.setAttribute('aria-expanded', 'true');
   content.removeAttribute('hidden');
 }
-function hideCollapse(handle, content) {
+function hideCollapse(content) {
+  const ck = clickables.get(`collapse${content.id}`);
+  if (ck && ck.menuItems.includes(menu.querySelector("button.active"))) {
+    ck.menuItems.forEach((c) => {
+      c.classList.remove("active");
+    });
+  }
+
   content.classList.remove("open");
-  handle.setAttribute('aria-expanded', 'false');
   content.setAttribute('hidden', 'true');
 }
+document.querySelectorAll('[data-collapse-toggle]').forEach((handle) => {
+  if (handle.dataset.collapseOpen || handle.dataset.collapseClose) {
+    throwError('O atributo "data-collapse-toggle" não pode ser usado em conjunto com "data-collapse-open" ou "data-collapse-close"');
+  }
+
+  const content = document.querySelector("#" + handle.dataset.collapseToggle);
+  handle.setAttribute('aria-expanded', 'false');
+  handle.setAttribute('aria-controls', content.id);
+  content.setAttribute('hidden', 'true');
+
+  handle.addEventListener('click', () => {
+    const isOpen = content.getAttribute('hidden') !== 'true';
+
+    if (isOpen) {
+      handle.setAttribute('aria-expanded', 'false');
+      hideCollapse(content);
+    } else {
+      const group = handle.closest('[data-collapse-grupo]');
+      if (group) {
+        group.querySelectorAll('[data-collapse]').forEach((other) => {
+          const handleOther = document.querySelector(`[data-collapse-open="${other.id}"],[data-collapse-toggle="${other.id}"]`);
+          handleOther.setAttribute('aria-expanded', 'false');
+          hideCollapse(other);
+        });
+      }
+      handle.setAttribute('aria-expanded', 'true');
+      showCollapse(content);
+    }
+  });
+});
 document.querySelectorAll('[data-collapse-open]').forEach((handle) => {
+  if (handle.dataset.collapseClose) {
+    throwError('O atributo "data-collapse-open" não pode ser usado em conjunto com "data-collapse-close"');
+  }
   const content = document.querySelector("#" + handle.dataset.collapseOpen);
   handle.setAttribute('aria-expanded', 'false');
   handle.setAttribute('aria-controls', content.id);
   content.setAttribute('hidden', 'true');
 
   handle.addEventListener('click', () => {
-    const isOpen = handle.getAttribute('aria-expanded') === 'true';
+    const isOpen = content.getAttribute('hidden') !== 'true';
 
-    if (isOpen) {
-      hideCollapse(handle, content);
-    } else {
+    if (!isOpen) {
       const group = handle.closest('[data-collapse-grupo]');
       if (group) {
         group.querySelectorAll('[data-collapse]').forEach((other) => {
-          const handleOther = document.querySelector(`[data-collapse-open="${other.id}"]`);
-          hideCollapse(handleOther, other);
+          const handleOther = document.querySelector(`[data-collapse-open="${other.id}"],[data-collapse-toggle="${other.id}"]`);
+          handleOther.setAttribute('aria-expanded', 'false');
+          hideCollapse(other);
         });
       }
-      showCollapse(handle, content);
+      handle.setAttribute('aria-expanded', 'true');
+      showCollapse(content);
+    }
+  });
+});
+document.querySelectorAll('[data-collapse-close]').forEach((handle) => {
+  const content = (handle.dataset.collapseClose && document.querySelector("#" + handle.dataset.collapseClose)) || handle.closest('[data-collapse]');
+
+  handle.addEventListener('click', () => {
+    const isOpen = content.getAttribute('hidden') !== 'true';
+    console.log(isOpen, content)
+
+    if (isOpen) {
+      hideCollapse(content);
     }
   });
 });
@@ -260,6 +328,16 @@ document.querySelectorAll('[data-collapse-open]').forEach((handle) => {
 const backdrop = document.createElement('div');
 backdrop.classList.add('backdrop');
 document.querySelector('.principal').prepend(backdrop);
+
+function getPopupParent(popup) {
+  const parent = popup.parentElement.closest('[data-popup]');
+
+  if (!parent) {
+    return "";
+  }
+
+  return parent.id;
+}
 
 function openPopup(handle, popup) {
   const ck = clickables.get(`popup${handle.dataset.popupOpen}`);
@@ -341,6 +419,11 @@ function closePopup(popup) {
     imagem.classList.remove('zoomed');
     imagem.style.transform = '';
   }
+
+  const parentPopup = popup.dataset.parentPopup && document.querySelector(`#${popup.dataset.parentPopup}`);
+  if (parentPopup) {
+    openPopup(principalElem.querySelector(`[data-popup-open="${popup.dataset.parentPopup}"]`), parentPopup);
+  }
 }
 document.body.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && backdrop.classList.contains('open')) {
@@ -355,6 +438,8 @@ document.querySelectorAll('[data-popup]').forEach((popup) => {
   closeBtn.title = 'Fechar';
   closeBtn.tabIndex = 0;
   popup.prepend(closeBtn);
+
+  popup.setAttribute("data-parent-popup", getPopupParent(popup));
 
   closeBtn.addEventListener('click', () => {
     closePopup(popup);
@@ -378,6 +463,14 @@ document.querySelectorAll('[data-popup-close]:not([data-popup-open])').forEach((
   closeModal.addEventListener('click', () => {
     const popup = closeModal.closest('[data-popup]');
     closePopup(popup);
+  });
+});
+document.querySelectorAll('[data-popup-close-all]').forEach((closeModal) => {
+  closeModal.addEventListener('click', () => {
+    const popups = document.querySelectorAll('[data-popup]');
+    popups.forEach((popup) => {
+      closePopup(popup);
+    });
   });
 });
 

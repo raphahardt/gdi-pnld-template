@@ -2,6 +2,7 @@
   "dependencies": {
     "inquirer": "^11.1.0",
     "inquirer-file-selector": "^0.4.0",
+    "node-html-parser": "^6.1.13",
     "pdf-lib": "^1.17.1",
     "timesnap": "^0.3.3"
   }

@@ -20,7 +20,9 @@ a,
 [data-popup-open],
 [data-popup-close],
 [data-popup] > .close,
+[data-collapse] > .close,
 [data-collapse-open],
+[data-collapse-toggle],
 ul[data-menu] button,
 #menu::after,
 [data-slides] .slide-right,
@@ -139,7 +141,8 @@ body.vertical [data-popup].center {
     display: block;
     animation: popup-open 300ms;
 }
-[data-popup] > .close {
+[data-popup] > .close,
+[data-collapse] > .close {
     float: right;
     font-size: 20px;
     color: black;
