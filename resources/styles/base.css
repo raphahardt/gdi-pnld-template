@@ -371,6 +371,9 @@ body.vertical [data-popup].big { width: 660px }
 .menu-carousel button {
     width: max-content;
 }
+.menu-carousel ul li:first-child {
+    list-style: none !important;
+}
 
 #menu {
     --top: 50px;
