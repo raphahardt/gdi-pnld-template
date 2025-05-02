@@ -5,10 +5,6 @@ export async function copiarRecursos(fromFolder, finalFolder) {
   await fs.promises.copyFile(path.resolve(fromFolder, 'resources/styles/base.css'), path.resolve(finalFolder, 'resources/styles/base.css'));
   await fs.promises.copyFile(path.resolve(fromFolder, 'resources/scripts/floating-ui.js'), path.resolve(finalFolder, 'resources/scripts/floating-ui.js'));
   await fs.promises.copyFile(path.resolve(fromFolder, 'resources/scripts/scripts.js'), path.resolve(finalFolder, 'resources/scripts/scripts.js'));
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images/CHS.png'), path.resolve(finalFolder, 'resources/images/CHS.png'));
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images/CNT.png'), path.resolve(finalFolder, 'resources/images/CNT.png'));
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images/LGG.png'), path.resolve(finalFolder, 'resources/images/LGG.png'));
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images/MAT.png'), path.resolve(finalFolder, 'resources/images/MAT.png'));
   await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images/click-hand.png'), path.resolve(finalFolder, 'resources/images/click-hand.png'));
 }
 

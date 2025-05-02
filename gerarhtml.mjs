@@ -6,21 +6,16 @@ import { gerarCarousel } from "./_modulos/carousel.mjs";
 import { gerarInfMap } from "./_modulos/infmap.mjs";
 
 const MATERIAS = [
-  {area: 'chs', materia: 'filosofia'},
-  {area: 'chs', materia: 'geografia'},
-  {area: 'chs', materia: 'historia'},
-  {area: 'chs', materia: 'sociologia'},
-  {area: 'cnt', materia: 'biologia'},
-  {area: 'cnt', materia: 'fisica'},
-  {area: 'cnt', materia: 'quimica'},
-  {area: 'lgg', materia: 'artes'},
-  {area: 'lgg', materia: 'portugues'},
-  {area: 'lgg', materia: 'redacao'},
-  {area: 'mat', materia: 'matematica'},
+  {materia: 'ciencias'},
+  {materia: 'geografia'},
+  {materia: 'historia'},
+  {materia: 'matematica'},
+  {materia: 'portugues'},
+  {materia: 'interdisciplinar'},
 ]
 
 /**
- * @type {{nome: string, mat: {area: string, materia: string}, vertical: boolean, tipo: string, titulo: string}}
+ * @type {{nome: string, mat: {materia: string}, vertical: boolean, tipo: string, titulo: string}}
  */
 const infos = await inquirer.prompt([
   {
@@ -31,10 +26,10 @@ const infos = await inquirer.prompt([
   {
     type: 'list',
     choices: MATERIAS.map((obj) => ({
-      name: `${obj.area} - ${obj.materia}`,
+      name: `${obj.materia}`,
       value: obj,
     })),
-    message: 'Escolha a área e a matéria:',
+    message: 'Escolha a matéria:',
     name: 'mat',
   },
   {
@@ -56,9 +51,9 @@ const infos = await inquirer.prompt([
   },
 ]);
 
-const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.area} ${infos.mat.materia}`;
+const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.materia}`;
 
-const generateFolder = path.resolve(import.meta.dirname, 'projetos', `V2-PNLD2026-ESC-${infos.nome}`);
+const generateFolder = path.resolve(import.meta.dirname, 'projetos', `V1-PNLD2027-ESC-${infos.nome}`);
 
 let htmlInfo;
 if (infos.tipo === "Carrossel") {

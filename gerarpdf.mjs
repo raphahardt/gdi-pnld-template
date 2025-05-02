@@ -132,6 +132,10 @@ for await (const folder of iterateFolders(selectedPath)) {
   console.log("PDF gerado");
 
 // não precisa mais da pasta de imagens
-  await fs.promises.rm(path.resolve(folder, 'pdf'), { recursive: true });
+  try {
+    await fs.promises.rm(path.resolve(folder, 'pdf'), { recursive: true });
+  } catch (e) {
+    console.log(`Erro ao remover a pasta ${path.resolve(folder, 'pdf')}: ${e}. Remova manualmente.`);
+  }
   i++;
 }

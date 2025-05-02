@@ -4,11 +4,11 @@ import path from "path";
 
 const CONTEUDO_TEMPLATE = `
     <div id="menu">
-        <div>Acesse os <span class="italic">links</span> abaixo para navegar e ampliar seus conhecimentos:</div>
+        <div class="menu-titulo">Menu</div>
         <ul data-menu></ul>
     </div>
 
-    <h1 class="tituloPrincipal">{titulo}</h1>
+    <h1 class="titulo-principal">{titulo}</h1>
 
     {clicaveis}
     
@@ -47,13 +47,6 @@ export async function gerarInfMap(finalFolder) {
     position: relative;
     width: 100%;
     height: 100%;
-}
-.tituloPrincipal {
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    transform: translateX(-50%);
-    text-align: center;
 }
 `;
 

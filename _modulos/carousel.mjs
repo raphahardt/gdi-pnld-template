@@ -22,18 +22,10 @@ const STYLES = `
     padding: 10px;
     box-sizing: border-box;
 }
-.tituloPrincipal {
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    transform: translateX(-50%);
-    text-align: center;
-    width: fit-content;
-    z-index: 1;
-}
 `
 
-const CONTEUDO_TEMPLATE = `<h1 class="tituloPrincipal">{titulo}</h1>
+const CONTEUDO_TEMPLATE = `<div class="menu-carousel"><ul data-menu></ul></div>
+    <h1 class="titulo-principal">{titulo}</h1>
 
     <div data-slides>
         {slides}
