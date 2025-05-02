@@ -3,23 +3,6 @@
 *, *::before, *::after {
     box-sizing: border-box;
 }
-body.chs { --cor-curso: #104b88 }
-body.cnt { --cor-curso: #28401d }
-body.lgg { --cor-curso: #6F5506 }
-body.mat { --cor-curso: #7b0f00 }
-
-body.filosofia { --cor-materia: #7b4b68; }
-body.geografia { --cor-materia: #64260b; }
-body.historia { --cor-materia: #b44017; }
-body.sociologia { --cor-materia: #056664; }
-body.biologia { --cor-materia: #158d3b; }
-body.fisica { --cor-materia: #e7442f; }
-body.quimica { --cor-materia: #852758; }
-body.artes { --cor-materia: #704695; }
-body.portugues { --cor-materia: #29327e; }
-body.redacao { --cor-materia: #e82d88; }
-body.matematica { --cor-materia: #e30613; }
-
 body, html { height: 100%; margin: 0 }
 body {
     font-size: 16px;
@@ -337,112 +320,84 @@ body.vertical [data-popup].big { width: 660px }
     transform: none !important;
 }
 
-.principal {
-    border: 1px solid var(--cor-curso);
-    border-radius: 5px;
-}
-.titulo-principal {
-    display: block;
-    width: 100%;
-    background-color: var(--cor-curso);
-    color: white;
-    padding: 10px;
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: center;
-    z-index: 101;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.menu-carousel {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    z-index: 101;
-}
-.menu-carousel ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    gap: 30px;
-}
-.menu-carousel + .titulo-principal {
-    top: 40px;
-}
-.menu-carousel button {
-    width: max-content;
-}
-
 #menu {
-    --top: 50px;
-    width: 250px;
-    height: auto;
-    color: black;
+    width: 300px;
+    height: 50px;
     position: absolute;
     background-color: white;
-    padding: 15px;
-    padding-bottom: 30px;
+    color: black;
+    padding: 15px 15px 15px 45px;
     border-radius: 0 25px 25px 0;
     z-index: 102;
-    top: var(--top);
+    top: 15px;
     left: 0;
+    background-position: -3px 0;
+    background-size: 40px 48px;
+    background-repeat: no-repeat;
+    transform: translateX(-260px);
+    transition-property: transform, height;
+    transition-duration: 400ms;
     overflow: hidden;
-}
-#menu .menu-titulo {
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
-    background-color: var(--cor-curso);
-    color: white;
-    padding: 5px;
-    border-radius: 10px;
-    z-index: 2;
-}
-#menu::after {
-    content: "";
-    position: absolute;
-    border: 1px solid;
-    border-radius: 0 10px 10px 0;
-    border-color: var(--cor-curso);
-    border-left: 0 !important;
-    pointer-events: none;
-    left: 15px;
-    top: calc(1rem + 15px);
-    right: 15px;
-    bottom: 15px;
-    z-index: -1;
 }
 #menu::before {
     content: "";
     position: absolute;
-    bottom: 15px;
-    left: 15px;
-    width: 7px;
-    height: 7px;
-    background-color: var(--cor-curso);
-    border-radius: 50%;
-    transform: translateY(50%) translateX(-50%);
+    top: 0;
+    left: -3px;
+    width: 40px;
+    height: 48px;
+    background-position: 0 0;
+    background-size: 40px 48px;
+    background-repeat: no-repeat;
 }
+/*#menu::after {*/
+/*    content: "+";*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    width: 40px;*/
+/*    height: 50px;*/
+/*    font-weight: 600;*/
+/*    font-size: 2rem;*/
+/*    text-align: center;*/
+/*}*/
+#menu.bottomright, #menu.topright {
+    left: auto;
+    right: 0;
+    border-radius: 25px 0 0 25px;
+    padding: 15px;
+    transform: translateX(260px);
+}
+#menu.bottomright::after, #menu.topright::after {
+    left: 0;
+    right: auto;
+}
+#menu.bottomright::before, #menu.topright::before {
+    left: auto;
+    right: 0;
+    transform: scaleX(-1);
+}
+#menu.bottomright, #menu.bottomleft {
+    top: auto;
+    bottom: 15px;
+}
+/*#menu.open:not(.temp-close) {*/
+#menu.open, #menu.temp-close {
+    transform: translateX(0);
+    height: auto;
+}
+/*#menu.open:not(.temp-close)::after {*/
+/*#menu.open::after, #menu.temp-close::after {*/
+/*    content: "-";*/
+/*}*/
 #menu > ul {
     padding: 0;
     margin: 10px 0 0 20px;
 }
-#menu li::marker, [data-menu] li::marker {
-    color: var(--cor-curso);
-}
 #menu li > * {
     vertical-align: text-top;
 }
-#menu button, [data-menu] button {
+#menu button {
     background-color: transparent;
     color: inherit;
     border: 0;
@@ -453,8 +408,26 @@ body.vertical [data-popup].big { width: 660px }
 #menu > div:first-child {
     width: 200px;
 }
+body.chs #menu { color: #104b88 }
+body.cnt #menu { color: #28401d }
+body.lgg #menu { color: #6F5506 }
+body.mat #menu { color: #7b0f00 }
+body.chs #menu::before { background-image: url("../images/CHS.png"); }
+body.cnt #menu::before { background-image: url("../images/CNT.png"); }
+body.lgg #menu::before { background-image: url("../images/LGG.png"); }
+body.mat #menu::before { background-image: url("../images/MAT.png"); }
 
-#menu.temp-close button.active { color: var(--cor-materia); font-weight: bolder; }
+body.filosofia #menu.temp-close button.active { color: #7b4b68; font-weight: bolder; }
+body.geografia #menu.temp-close button.active { color: #64260b; font-weight: bolder; }
+body.historia #menu.temp-close button.active { color: #b44017; font-weight: bolder; }
+body.sociologia #menu.temp-close button.active { color: #056664; font-weight: bolder; }
+body.biologia #menu.temp-close button.active { color: #158d3b; font-weight: bolder; }
+body.fisica #menu.temp-close button.active { color: #e7442f; font-weight: bolder; }
+body.quimica #menu.temp-close button.active { color: #852758; font-weight: bolder; }
+body.artes #menu.temp-close button.active { color: #704695; font-weight: bolder; }
+body.portugues #menu.temp-close button.active { color: #29327e; font-weight: bolder; }
+body.redacao #menu.temp-close button.active { color: #e82d88; font-weight: bolder; }
+body.matematica #menu.temp-close button.active { color: #e30613; font-weight: bolder; }
 
 [data-zoom-imagem] {
     transition-property: transform;
@@ -565,17 +538,37 @@ h1 {
     width: fit-content;
     font-size: 1.3em;
     font-weight: 600;
-    /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;*/
-    background-color: var(--cor-materia);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
 }
+body.filosofia h1 { background-color: #7b4b68; }
+body.geografia h1 { background-color: #64260b; }
+body.historia h1 { background-color: #b44017; }
+body.sociologia h1 { background-color: #056664; }
+body.biologia h1 { background-color: #158d3b; }
+body.fisica h1 { background-color: #e7442f; }
+body.quimica h1 { background-color: #852758; }
+body.artes h1 { background-color: #704695; }
+body.portugues h1 { background-color: #29327e; }
+body.redacao h1 { background-color: #e82d88; }
+body.matematica h1 { background-color: #e30613; }
 
 
 h2 {
     font-size: 1.3em;
     font-weight: 600;
-    /*font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;*/
-    color: var(--cor-materia);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif, Helvetica, sans-serif;
 }
+body.filosofia h2 {color: #7b4b68; }
+body.geografia h2 {color: #64260b; }
+body.historia h2 {color: #b44017; }
+body.sociologia h2 {color: #056664; }
+body.biologia h2 {color: #158d3b; }
+body.fisica h2 {color: #e7442f; }
+body.quimica h2 {color: #852758; }
+body.artes h2 {color: #704695; }
+body.portugues h2 {color: #29327e; }
+body.redacao h2 {color: #e82d88; }
+body.matematica h2 {color: #e30613; }
 
 table {
     font-size: 0.8em;
@@ -584,15 +577,38 @@ table {
 
 th, td {
     padding: 2mm;
-    border: solid 2px var(--cor-materia);
+    border: solid 1px;
 }
 
 thead {
     color: white;
     font-weight: bold;
     text-transform: uppercase;
-    background-color: var(--cor-materia);
 }
+
+body.filosofia thead { background-color: #7b4b68; }
+body.geografia thead { background-color: #64260b; }
+body.historia thead { background-color: #b44017; }
+body.sociologia thead { background-color: #056664; }
+body.biologia thead { background-color: #158d3b; }
+body.fisica thead { background-color: #e7442f; }
+body.quimica thead { background-color: #852758; }
+body.artes thead { background-color: #704695; }
+body.portugues thead { background-color: #29327e; }
+body.redacao thead { background-color: #e82d88; }
+body.matematica thead { background-color: #e30613; }
+
+body.filosofia td, body.filosofia th { border: solid 2px #7b4b68; }
+body.geografia td, body.geografia th { border: solid 2px #64260b; }
+body.historia td, body.historia th { border: solid 2px #b44017; }
+body.sociologia td, body.sociologia th { border: solid 2px #056664; }
+body.biologia td, body.biologia th { border: solid 2px #158d3b; }
+body.fisica td, body.fisica th { border: solid 2px #e7442f; }
+body.quimica td, body.quimica th { border: solid 2px #852758; }
+body.artes td, body.artes th body.artes th { border: solid 2px #704695; }
+body.portugues td, body.portugues th { border: solid 2px #29327e; }
+body.redacao td, body.redacao th { border: solid 2px #e82d88; }
+body.matematica td, body.matematica th { border: solid 2px #e30613; }
 
 th:not(:first-child) {
     border-left-color: white !important;

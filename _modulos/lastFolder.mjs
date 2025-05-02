@@ -5,7 +5,15 @@ export function getLastFolder() {
   let lastStartFolder = fs.existsSync(".last_cwd")
     ? fs.readFileSync(".last_cwd", "utf8")
     : process.cwd();
-  if (!fs.statSync(lastStartFolder).isDirectory()) {
+
+  let isDir;
+  try {
+    isDir = fs.statSync(lastStartFolder).isDirectory();
+  } catch (e) {
+    isDir = false;
+  }
+
+  if (!isDir) {
     lastStartFolder = process.cwd();
   }
 
