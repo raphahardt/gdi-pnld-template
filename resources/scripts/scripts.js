@@ -207,7 +207,7 @@ document.querySelectorAll("[data-slides]").forEach((slides) => {
       const menuItemLi = document.createElement("li");
       const menuItem = document.createElement("button");
       menuItem.classList.add("menu-item");
-      menuItem.innerText = `Slide ${index + 1}`;
+      menuItem.innerText = `Foto ${index + 1}`;
       menuItem.addEventListener("click", (event) => {
         slides.querySelector(".ativo").classList.remove("ativo");
         slid.classList.add("ativo");
