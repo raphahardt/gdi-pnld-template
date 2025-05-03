@@ -510,6 +510,9 @@ body.vertical [data-popup].big { width: 660px }
     right: 0;
     border-radius: 50% 0 0 50%;
 }
+[data-slides] .creditos {
+    margin-top: 90px;
+}
 
 [data-collapse] { display: none }
 [data-collapse][data-collapse-tipo="zoom"] { display: block; transform: scale(0); transition: transform 300ms; height: 0 }

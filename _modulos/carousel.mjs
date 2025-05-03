@@ -37,7 +37,7 @@ const SLIDE_TEMPLATE = `
             {legend}
         </div>`;
 
-const IMAGE_TEMPLATE = `<img src="{src}" class="slideImagem" alt=" "{creditos}>`;
+const IMAGE_TEMPLATE = `<img src="{src}" class="slideImagem" alt=" ">{creditos}`;
 
 const LEGEND_TEMPLATE = `<div class="legenda">{texto}</div>`;
 
@@ -85,7 +85,7 @@ export async function gerarCarousel(finalFolder) {
 
   const slidesInfo = await inquirer.prompt(questionsSlidesInfo);
   const slides = selectedFiles.files.map((file, index) => {
-    const creditos = slidesInfo[`creditos${index}`] ? (` data-creditos="${slidesInfo[`creditos${index}`]}"` + (slidesInfo[`legenda${index}`] ? ' data-creditos-posicao="topright"' : '')) : '';
+    const creditos = slidesInfo[`creditos${index}`] ? (`<div class="creditos topright">${slidesInfo[`creditos${index}`]}</div>`) : '';
 
     const image = IMAGE_TEMPLATE
     .replace('{src}', `./resources/images/${file}`)
