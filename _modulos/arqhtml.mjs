@@ -5,7 +5,9 @@ export async function copiarRecursos(fromFolder, finalFolder) {
   await fs.promises.copyFile(path.resolve(fromFolder, 'resources/styles/base.css'), path.resolve(finalFolder, 'resources/styles/base.css'));
   await fs.promises.copyFile(path.resolve(fromFolder, 'resources/scripts/floating-ui.js'), path.resolve(finalFolder, 'resources/scripts/floating-ui.js'));
   await fs.promises.copyFile(path.resolve(fromFolder, 'resources/scripts/scripts.js'), path.resolve(finalFolder, 'resources/scripts/scripts.js'));
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images/click-hand.png'), path.resolve(finalFolder, 'resources/images/click-hand.png'));
+  for (const file of await fs.promises.readdir(path.resolve(fromFolder, 'resources/images'))) {
+    await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images', file), path.resolve(finalFolder, 'resources/images', file));
+  }
 }
 
 export async function criarHtml(fromFolder, finalFolder, titulo, bodyClass, conteudo) {

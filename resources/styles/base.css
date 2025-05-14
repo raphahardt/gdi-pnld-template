@@ -568,7 +568,7 @@ body.vertical [data-zoom-principal] {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 101;
+    z-index: 102;
 }
 .zoom-btn {
     width: 40px;
