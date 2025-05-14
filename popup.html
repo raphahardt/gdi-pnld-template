@@ -7,14 +7,23 @@
     <link rel="stylesheet" href="./resources/styles/base.css">
     <link rel="stylesheet" href="./resources/styles/styles.css">
 </head>
-<body class="">
+<body class="portugues">
 <!-- Conteúdo principal -->
 <div class="principal" style="background: #edb3e0">
+    <div id="menu">
+        <div class="menu-titulo">Menu</div>
+        <ul data-menu></ul>
+    </div>
 
-    <!-- Item clicável que abre o popup -->
-    <h1 data-popup-open="modal-1">Clique aqui para abrir o modal 1</h1>
-    <h1 data-popup-open="modal-2">Clique aqui para abrir o modal 2</h1>
+    <h1 class="titulo-principal">Título aqui</h1>
 
+    <div data-zoom-principal style="box-shadow: inset 0 0 1px 50px black">
+
+        <!-- Item clicável que abre o popup -->
+        <h1 data-popup-open="modal-1" data-click="Modal 1">Clique aqui para abrir o modal 1</h1>
+        <h1 data-popup-open="modal-2" data-click="Modal 2">Clique aqui para abrir o modal 2</h1>
+
+    </div>
 <!-- Exemplo de popup. Ele tem que ficar agora DENTRO da div principal
 
 Você pode combinar tamanhos, posições e cores como quiser.

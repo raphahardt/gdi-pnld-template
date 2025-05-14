@@ -11,24 +11,122 @@ const isVertical = document.body.classList.contains("vertical");
 const proportion = { ho: isVertical ? 720 : 1280, ve: isVertical ? 1280 : 720 };
 const principalElem = document.querySelector(".principal");
 
+let mainScale = 1;
 const resizeObserver = new ResizeObserver((entries) => {
   const rect = entries[0].target.getBoundingClientRect();
   const mainRect = { width: proportion.ho, height: proportion.ve };
 
-  const scale = Math.min(rect.width / mainRect.width, rect.height / mainRect.height);
+  mainScale = Math.min(rect.width / mainRect.width, rect.height / mainRect.height);
   const xDiff = mainRect.width - rect.width;
-  const translateX = xDiff > 0 && scale !== 0 ? -xDiff / 2 / scale : 0;
+  const translateX = xDiff > 0 && mainScale !== 0 ? -xDiff / 2 / mainScale : 0;
   const yDiff = mainRect.height - rect.height;
-  const translateY = yDiff > 0 && scale !== 0 ? -yDiff / 2 / scale : 0;
+  const translateY = yDiff > 0 && mainScale !== 0 ? -yDiff / 2 / mainScale : 0;
 
   Object.assign(principalElem.style, {
     width: `${mainRect.width}px`,
     height: `${mainRect.height}px`,
-    transform: `scale(${scale}) translate(${translateX}px, ${translateY}px)`,
+    transform: `scale(${mainScale}) translate(${translateX}px, ${translateY}px)`,
   });
 });
 
 resizeObserver.observe(document.body);
+
+function getPrincipalRect() {
+  return principalElem.getBoundingClientRect();
+}
+
+// zoom principal
+const zoomContainer = document.querySelector("[data-zoom-principal]");
+
+if (zoomContainer) {
+  const zoomAdder = 0.5;
+  let dragging = false;
+  let offsetX = 0, offsetY = 0;
+  let startX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
+  let startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
+
+  function zoomMoveStart(ev) {
+    ev.preventDefault();
+    const rect = getPrincipalRect();
+
+    const elem = ev.type === "touchstart" ? ev.touches[0] : ev;
+
+    offsetX = (elem.clientX - rect.x) / mainScale;
+    offsetY = (elem.clientY - rect.y) / mainScale;
+
+    startX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
+    startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
+
+    dragging = true;
+  }
+
+  function zoomMove(ev) {
+    if (dragging) {
+      const rect = getPrincipalRect();
+      const scale = parseFloat(zoomContainer.style.getPropertyValue("--zoom-mult") || 1);
+      const limitX = (((proportion.ho * scale) - proportion.ho) / 2) / scale;
+      const limitY = (((proportion.ve * scale) - proportion.ve) / 2) / scale;
+
+      const elem = ev.type === "touchmove" ? ev.touches[0] : ev;
+
+      const cliX = (elem.clientX - rect.x) / mainScale;
+      const cliY = (elem.clientY - rect.y) / mainScale;
+
+      const deltaX = cliX - offsetX;
+      const deltaY = cliY - offsetY;
+
+      const newX = Math.min(Math.max(startX + deltaX, -limitX), limitX);
+      const newY = Math.min(Math.max(startY + deltaY, -limitY), limitY);
+
+      zoomContainer.style.setProperty("--zoom-offset-x", `${newX}px`);
+      zoomContainer.style.setProperty("--zoom-offset-y", `${newY}px`);
+    }
+  }
+
+  function zoomMoveEnd(ev) {
+    ev.preventDefault();
+    dragging = false;
+  }
+
+  zoomContainer.addEventListener("mousedown", zoomMoveStart);
+  zoomContainer.addEventListener("mousemove", zoomMove);
+  zoomContainer.addEventListener("mouseup", zoomMoveEnd);
+  zoomContainer.addEventListener("touchstart", zoomMoveStart);
+  zoomContainer.addEventListener("touchmove", zoomMove);
+  zoomContainer.addEventListener("touchend", zoomMoveEnd);
+
+  const zoomButtons = [document.createElement("button"), document.createElement("button")]
+    .map((btn, i) => {
+      const isOut = i === 0;
+      btn.classList.add("zoom-btn");
+      btn.classList.add(`zoom-${isOut ? "out" : "in"}`);
+      btn.addEventListener("click", (event) => {
+        const adder = isOut ? -zoomAdder : zoomAdder;
+        const scale = parseFloat(zoomContainer.style.getPropertyValue("--zoom-mult") || 1) + adder;
+        const normalizedScale = Math.max(1, Math.min(10, scale));
+        zoomContainer.style.setProperty("--zoom-mult", normalizedScale);
+
+        // atualiza o offset pra não quebrar o conteúdo
+        const actX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
+        const actY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
+        const limitX = (((proportion.ho * normalizedScale) - proportion.ho) / 2) / normalizedScale;
+        const limitY = (((proportion.ve * normalizedScale) - proportion.ve) / 2) / normalizedScale;
+        const newX = Math.min(Math.max(actX, -limitX), limitX);
+        const newY = Math.min(Math.max(actY, -limitY), limitY);
+        console.log(newX, limitX, actX)
+        zoomContainer.style.setProperty("--zoom-offset-x", `${newX}px`);
+        zoomContainer.style.setProperty("--zoom-offset-y", `${newY}px`);
+      })
+
+      return btn;
+    });
+
+  const zoomButtonsContainer = document.createElement("div");
+  zoomButtonsContainer.classList.add("zoom-buttons");
+  zoomButtonsContainer.append(...zoomButtons);
+
+  principalElem.appendChild(zoomButtonsContainer);
+}
 
 // menu
 const menu = document.getElementById("menu");
@@ -162,8 +260,8 @@ document.querySelectorAll("[data-slides]").forEach((slides) => {
   rightElem.innerText = "❯";
   leftElem.innerText = "❮";
 
-  slides.appendChild(rightElem);
-  slides.appendChild(leftElem);
+  principalElem.appendChild(rightElem);
+  principalElem.appendChild(leftElem);
 
   if (firstSlide) {
     firstSlide.classList.add("ativo");

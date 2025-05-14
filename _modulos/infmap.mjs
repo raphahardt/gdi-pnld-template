@@ -10,30 +10,32 @@ const CONTEUDO_TEMPLATE = `
 
     <h1 class="titulo-principal">{titulo}</h1>
 
-    {clicaveis}
+    <div data-zoom-principal>
+        {clicaveis}
+    </div>
     
     {bottom}
 `;
 
 const POPUP_TEMPLATE = `
-    <div id="popup{index}" data-popup class="center">
-        
-    </div>
+        <div id="popup{index}" data-popup class="center">
+            
+        </div>
 `;
 
 const TOOLTIP_TEMPLATE = `
-    <div id="tooltip{index}" data-tooltip class="tooltipHover">
-    
-    </div>
+        <div id="tooltip{index}" data-tooltip class="tooltipHover">
+        
+        </div>
 `;
 
 const IMAGEM_TEMPLATE = `<img src="./resources/images/{imageName}" alt=" " class="imagemFundo" />`;
 
 const CLICAVEIS_TEMPLATE = `<div data-zoom-imagem class="container">
-        {imagem}
-        
-        {pontos}
-    </div>`;
+            {imagem}
+            
+            {pontos}
+        </div>`;
 
 const PONTO_TEMPLATE = `<div class="ponto p{index}" data-click="{titulo}"{attrs}></div>`;
 

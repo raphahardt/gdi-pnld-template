@@ -27,15 +27,17 @@ const STYLES = `
 const CONTEUDO_TEMPLATE = `<div class="menu-carousel"><ul data-menu></ul></div>
     <h1 class="titulo-principal">{titulo}</h1>
 
-    <div data-slides>
-        {slides}
+    <div data-zoom-principal>
+        <div data-slides>
+            {slides}
+        </div>
     </div>`;
 
 const SLIDE_TEMPLATE = `
-        <div data-slide>
-            {image}
-            {legend}
-        </div>`;
+            <div data-slide>
+                {image}
+                {legend}
+            </div>`;
 
 const IMAGE_TEMPLATE = `<img src="{src}" class="slideImagem" alt=" ">{creditos}`;
 

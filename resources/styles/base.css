@@ -31,10 +31,11 @@ a,
 [data-collapse-open],
 [data-collapse-toggle],
 ul[data-menu] button,
+.zoom-buttons button,
 #menu::after,
-[data-slides] .slide-right,
-[data-slides] .slide-left {
-    cursor: url("../images/click-hand.png") 6 6, pointer;
+.slide-right,
+.slide-left {
+    cursor: url("../images/click-azul.png") 6 6, pointer;
 }
 [data-tooltip] {
     display: none;
@@ -451,6 +452,7 @@ body.vertical [data-popup].big { width: 660px }
 }
 
 #menu.temp-close button.active { color: var(--cor-2); font-weight: bolder; }
+[data-menu] button:hover { font-weight: bolder; }
 
 [data-zoom-imagem] {
     transition-property: transform;
@@ -490,7 +492,7 @@ body.vertical [data-popup].big { width: 660px }
     left: 0;
     top: 0;
 }
-[data-slides] .slide-left, [data-slides] .slide-right {
+.slide-left, .slide-right {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -505,11 +507,11 @@ body.vertical [data-popup].big { width: 660px }
     border: 0;
     vertical-align: middle;
 }
-[data-slides] .slide-left {
+.slide-left {
     left: 0;
     border-radius: 0 50% 50% 0;
 }
-[data-slides] .slide-right {
+.slide-right {
     right: 0;
     border-radius: 50% 0 0 50%;
 }
@@ -521,7 +523,9 @@ body.vertical [data-popup].big { width: 660px }
 [data-collapse][data-collapse-tipo="zoom"] { display: block; transform: scale(0); transition: transform 300ms; height: 0 }
 [data-collapse].open { transform: scale(1); display: block; height: auto }
 ul { margin: 0 0 0 25px; padding: 0 }
-.principal, [data-slides] > [data-slide] {
+.principal,
+[data-slides] > [data-slide],
+[data-zoom-principal] {
     display: block;
     aspect-ratio: 1920 / 1080;
     position: relative;
@@ -530,7 +534,9 @@ ul { margin: 0 0 0 25px; padding: 0 }
     margin: auto;
     overflow: hidden;
 }
-body.vertical .principal, body.vertical [data-slides] > [data-slide] {
+body.vertical .principal,
+body.vertical [data-slides] > [data-slide],
+body.vertical [data-zoom-principal] {
     aspect-ratio: 1080 / 1920;
     width: 720px;
     height: 1280px;
@@ -553,6 +559,39 @@ body.vertical .principal, body.vertical [data-slides] > [data-slide] {
 .principal > .colunas-horizontal > div {
     height: 0;
     min-height: 100%;
+}
+
+.zoom-buttons {
+    position: absolute;
+    top: 8px;
+    left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 101;
+}
+.zoom-btn {
+    width: 40px;
+    height: 30px;
+    background-color: white;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    border: 0;
+}
+.zoom-btn.zoom-out {
+    border-radius: 12px 0 0 12px;
+    background-image: url(../images/zoom-out.png);
+}
+.zoom-btn.zoom-in {
+    border-radius: 0 12px 12px 0;
+    background-image: url(../images/zoom-in.png);
+}
+[data-zoom-principal] {
+    --zoom-mult: 1;
+    --zoom-offset-x: 0;
+    --zoom-offset-y: 0;
+    transform: scale(var(--zoom-mult)) translate(var(--zoom-offset-x), var(--zoom-offset-y));
 }
 
 h1 {

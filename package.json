@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "html": "node gerarhtml.mjs",
+    "pdf": "node gerarpdf.mjs",
+    "update": "node atualizar_resources.mjs"
+  },
   "dependencies": {
     "inquirer": "^11.1.0",
     "inquirer-file-selector": "^0.4.0",

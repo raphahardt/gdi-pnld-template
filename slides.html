@@ -7,21 +7,25 @@
     <link rel="stylesheet" href="./resources/styles/base.css">
     <link rel="stylesheet" href="./resources/styles/styles.css">
 </head>
-<body>
+<body class="matematica">
 <!-- Conteúdo principal -->
 <div class="principal">
     <div id="menu">
-        <div>Você pode navegar através dos links abaixo:</div>
+        <div class="menu-titulo">Menu</div>
         <ul data-menu></ul>
     </div>
+
+    <h1 class="titulo-principal">Título aqui</h1>
 <!--
   Pode ser colocado a classe que quiser, inclusive, é recomendado pra mudar a cor do fundo de cada slide
   porque por padrão eles são transparentes. As cores aqui são só exemplos, não use elas -->
-    <div data-slides>
-        <div data-slide style="background: #94caf1">Slide 1</div>
-        <div data-slide style="background: #a7aff3">Slide 2</div>
-        <div data-slide style="background: #e68dd1">Slide 3</div>
-        <div data-slide style="background: #f8eace">Slide 4</div>
+    <div data-zoom-principal>
+        <div data-slides>
+            <div data-slide style="background: #94caf1; display: grid; place-items: center">Slide 1</div>
+            <div data-slide style="background: #a7aff3; display: grid; place-items: center">Slide 2</div>
+            <div data-slide style="background: #e68dd1; display: grid; place-items: center">Slide 3</div>
+            <div data-slide style="background: #f8eace;  display: grid; place-items: center">Slide 4</div>
+        </div>
     </div>
 </div>
 
