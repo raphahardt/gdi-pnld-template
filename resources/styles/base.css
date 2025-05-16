@@ -451,8 +451,8 @@ body.vertical [data-popup].big { width: 660px }
     width: 200px;
 }
 
-[data-menu] button.active { color: var(--cor-2); font-weight: bolder; }
 [data-menu] button:hover { font-weight: bolder; }
+[data-menu] button.active { color: var(--cor-2) !important; font-weight: bolder; }
 
 [data-zoom-imagem] {
     transition-property: transform;

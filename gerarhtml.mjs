@@ -15,13 +15,25 @@ const MATERIAS = [
 ]
 
 /**
- * @type {{nome: string, mat: {materia: string}, vertical: boolean, tipo: string, titulo: string}}
+ * @type {{nome: string, versao: string, mat: {materia: string}, vertical: boolean, tipo: string, titulo: string}}
  */
 const infos = await inquirer.prompt([
   {
     type: 'input',
     message: 'Qual vai ser o nome da pasta (exemplo: ART-INF3):',
     name: 'nome',
+  },
+  {
+    type: 'list',
+    choices: [
+      {name: "V1", value: "V1"},
+      {name: "V2", value: "V2"},
+      {name: "V3", value: "V3"},
+      {name: "V4", value: "V4"},
+    ],
+    message: 'Qual versão tá sendo gerada?',
+    name: 'versao',
+    default: "V1"
   },
   {
     type: 'list',
@@ -53,7 +65,7 @@ const infos = await inquirer.prompt([
 
 const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.materia}`;
 
-const generateFolder = path.resolve(import.meta.dirname, 'projetos', `V1-PNLD2027-ESC-${infos.nome}`);
+const generateFolder = path.resolve(import.meta.dirname, 'projetos', `${infos.versao}-ESC-${infos.nome}`);
 
 let htmlInfo;
 if (infos.tipo === "Carrossel") {

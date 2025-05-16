@@ -535,6 +535,10 @@ function closePopup(popup) {
     imagem.style.transform = '';
   }
 
+  menu.querySelectorAll("button.active").forEach((c) => {
+    c.classList.remove("active");
+  });
+
   const parentPopup = popup.dataset.parentPopup && document.querySelector(`#${popup.dataset.parentPopup}`);
   if (parentPopup) {
     openPopup(principalElem.querySelector(`[data-popup-open="${popup.dataset.parentPopup}"]`), parentPopup);
@@ -580,7 +584,7 @@ document.querySelectorAll('[data-popup-close]:not([data-popup-open])').forEach((
     closePopup(popup);
   });
 });
-document.querySelectorAll('[data-popup-close-all]').forEach((closeModal) => {
+[...document.querySelectorAll('[data-popup-close-all]'), backdrop].forEach((closeModal) => {
   closeModal.addEventListener('click', () => {
     const popups = document.querySelectorAll('[data-popup]');
     popups.forEach((popup) => {
