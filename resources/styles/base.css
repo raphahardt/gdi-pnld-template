@@ -451,7 +451,7 @@ body.vertical [data-popup].big { width: 660px }
     width: 200px;
 }
 
-#menu.temp-close button.active { color: var(--cor-2); font-weight: bolder; }
+[data-menu] button.active { color: var(--cor-2); font-weight: bolder; }
 [data-menu] button:hover { font-weight: bolder; }
 
 [data-zoom-imagem] {
@@ -569,6 +569,9 @@ body.vertical [data-zoom-principal] {
     justify-content: center;
     align-items: center;
     z-index: 102;
+}
+.principal:has(.menu-carousel) .zoom-buttons {
+    top: 4px;
 }
 .zoom-btn {
     width: 40px;

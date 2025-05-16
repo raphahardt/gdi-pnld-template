@@ -46,7 +46,6 @@ if (zoomContainer) {
   let startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
 
   function zoomMoveStart(ev) {
-    ev.preventDefault();
     const rect = getPrincipalRect();
 
     const elem = ev.type === "touchstart" ? ev.touches[0] : ev;
@@ -113,7 +112,7 @@ if (zoomContainer) {
         const limitY = (((proportion.ve * normalizedScale) - proportion.ve) / 2) / normalizedScale;
         const newX = Math.min(Math.max(actX, -limitX), limitX);
         const newY = Math.min(Math.max(actY, -limitY), limitY);
-        console.log(newX, limitX, actX)
+
         zoomContainer.style.setProperty("--zoom-offset-x", `${newX}px`);
         zoomContainer.style.setProperty("--zoom-offset-y", `${newY}px`);
       })
@@ -251,6 +250,7 @@ document.querySelectorAll("[data-creditos]").forEach((item) => {
 
 // detecção dos slides
 document.querySelectorAll("[data-slides]").forEach((slides) => {
+  const menuSlides = document.querySelector("ul[data-menu]");
   const firstSlide = slides.querySelector("[data-slide]");
   const lastSlide = slides.querySelector("[data-slide]:last-child");
   const rightElem = document.createElement("button");
@@ -263,8 +263,31 @@ document.querySelectorAll("[data-slides]").forEach((slides) => {
   principalElem.appendChild(rightElem);
   principalElem.appendChild(leftElem);
 
+  const allSlides = slides.querySelectorAll("[data-slide]");
+
+  allSlides.forEach((slid, index) => {
+    const menuItemLi = document.createElement("li");
+    const menuItem = document.createElement("button");
+    menuItem.classList.add("menu-item");
+    menuItem.innerText = `Foto ${index + 1}`;
+    menuItem.addEventListener("click", (event) => {
+      slides.querySelector(".ativo").classList.remove("ativo");
+      slid.classList.add("ativo");
+
+      // pinta o menu
+      menuSlides.querySelectorAll("button.active").forEach((c) => {
+        c.classList.remove("active");
+      });
+      menuItem.classList.add("active");
+    });
+
+    menuItemLi.append(menuItem);
+    menuSlides.append(menuItemLi);
+  });
+
   if (firstSlide) {
     firstSlide.classList.add("ativo");
+    menuSlides.querySelector("button")?.classList.add("active");
   }
 
   rightElem.addEventListener("click", (event) => {
@@ -279,11 +302,17 @@ document.querySelectorAll("[data-slides]").forEach((slides) => {
     }
 
     // força fechar o menu
-    menu.classList.remove("open");
+    // menu.classList.remove("open");
+
+    menuSlides.querySelectorAll("button").forEach((c, index) => {
+      c.classList.remove("active");
+      if (index === Array.from(allSlides).indexOf(slides.querySelector(".ativo"))) {
+        c.classList.add("active");
+      }
+    });
   });
 
   leftElem.addEventListener("click", (event) => {
-    const allSlides = slides.querySelectorAll("[data-slide]");
     const prevSlide = slides.querySelector(".ativo") === firstSlide ? lastSlide : allSlides[Array.from(allSlides).indexOf(slides.querySelector(".ativo")) - 1];
 
     if (prevSlide) {
@@ -295,24 +324,12 @@ document.querySelectorAll("[data-slides]").forEach((slides) => {
     }
 
     // força fechar o menu
-    menu.classList.remove("open");
-  });
-
-  document.querySelectorAll("ul[data-menu]").forEach((menu) => {
-    const allSlides = slides.querySelectorAll("[data-slide]");
-
-    allSlides.forEach((slid, index) => {
-      const menuItemLi = document.createElement("li");
-      const menuItem = document.createElement("button");
-      menuItem.classList.add("menu-item");
-      menuItem.innerText = `Foto ${index + 1}`;
-      menuItem.addEventListener("click", (event) => {
-        slides.querySelector(".ativo").classList.remove("ativo");
-        slid.classList.add("ativo");
-      });
-
-      menuItemLi.append(menuItem);
-      menu.append(menuItemLi);
+    // menu.classList.remove("open");
+    menuSlides.querySelectorAll("button").forEach((c, index) => {
+      c.classList.remove("active");
+      if (index === Array.from(slides.querySelectorAll("[data-slide]")).indexOf(slides.querySelector(".ativo"))) {
+        c.classList.add("active");
+      }
     });
   });
 });
@@ -414,7 +431,7 @@ document.querySelectorAll('[data-collapse-close]').forEach((handle) => {
 
   handle.addEventListener('click', () => {
     const isOpen = content.getAttribute('hidden') !== 'true';
-    console.log(isOpen, content)
+    // console.log(isOpen, content)
 
     if (isOpen) {
       hideCollapse(content);
