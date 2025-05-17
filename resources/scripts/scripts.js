@@ -597,8 +597,29 @@ document.querySelectorAll('[data-popup-close]:not([data-popup-open])').forEach((
 let activeTooltip = null;
 let activeCleanup = null;
 function showTooltip(handle, tooltip) {
+  // type Placement =
+  //   | 'top'
+  //   | 'top-start'
+  //   | 'top-end'
+  //   | 'right'
+  //   | 'right-start'
+  //   | 'right-end'
+  //   | 'bottom'
+  //   | 'bottom-start'
+  //   | 'bottom-end'
+  //   | 'left'
+  //   | 'left-start'
+  //   | 'left-end';
+  const placement = tooltip.dataset.tooltipPosition || "bottom";
+
+  // check if placement is valid
+  const validPlacements = ['top', 'top-start', 'top-end', 'right', 'right-start', 'right-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end'];
+  if (!validPlacements.includes(placement)) {
+    throwError('O valor do atributo "data-tooltip-position" deve ser "top", "top-start", "top-end", "right", "right-start", "right-end", "bottom", "bottom-start", "bottom-end", "left", "left-start" ou "left-end"');
+  }
+
   computePosition(handle, tooltip, {
-    placement: "bottom",
+    placement,
     strategy: "fixed",
     middleware: [offset(5), flip(), shift()]
   }).then(({ x, y }) => {
