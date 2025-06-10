@@ -1,12 +1,47 @@
 import fs from "fs";
 import path from "path";
 
-export async function copiarRecursos(fromFolder, finalFolder) {
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/styles/base.css'), path.resolve(finalFolder, 'resources/styles/base.css'));
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/scripts/floating-ui.js'), path.resolve(finalFolder, 'resources/scripts/floating-ui.js'));
-  await fs.promises.copyFile(path.resolve(fromFolder, 'resources/scripts/scripts.js'), path.resolve(finalFolder, 'resources/scripts/scripts.js'));
-  for (const file of await fs.promises.readdir(path.resolve(fromFolder, 'resources/images'))) {
-    await fs.promises.copyFile(path.resolve(fromFolder, 'resources/images', file), path.resolve(finalFolder, 'resources/images', file));
+export async function copiarRecursos(template, fromFolder, finalFolder) {
+  if (!fs.existsSync(path.resolve(fromFolder, 'resources', 'base'))) {
+    throw new Error(`Template "base" não encontrado em ${fromFolder}/resources`);
+  }
+
+  if (!fs.existsSync(path.resolve(fromFolder, 'resources', template))) {
+    throw new Error(`Template "${template}" não encontrado em ${fromFolder}/resources`);
+  }
+
+  async function _copy(file) {
+    const baseExists = fs.existsSync(path.resolve(fromFolder, 'resources', 'base', file));
+    const templateExists = fs.existsSync(path.resolve(fromFolder, 'resources', template, file));
+
+    if (baseExists) {
+      await fs.promises.copyFile(
+        path.resolve(fromFolder, 'resources', 'base', file),
+        path.resolve(finalFolder, 'resources', file)
+      );
+    }
+
+    if (templateExists) {
+      await fs.promises.copyFile(
+        path.resolve(fromFolder, 'resources', template, file),
+        path.resolve(finalFolder, 'resources', file)
+      );
+    }
+  }
+
+  await _copy('styles/base.css');
+  await _copy('scripts/floating-ui.js');
+  await _copy('scripts/scripts.js');
+  if (fs.existsSync(path.resolve(fromFolder, 'resources', template, 'images'))) {
+    for (const file of await fs.promises.readdir(path.resolve(fromFolder, 'resources', template, 'images'))) {
+      await _copy(`images/${file}`);
+    }
+  }
+  if (fs.existsSync(path.resolve(fromFolder, 'resources', template, 'fonts'))) {
+    await fs.promises.mkdir(path.resolve(finalFolder, 'resources/fonts'), { recursive: true });
+    for (const file of await fs.promises.readdir(path.resolve(fromFolder, 'resources', template, 'fonts'))) {
+      await _copy(`fonts/${file}`);
+    }
   }
 }
 
@@ -23,13 +58,13 @@ export async function criarHtml(fromFolder, finalFolder, titulo, bodyClass, cont
   await fs.promises.writeFile(path.resolve(finalFolder, 'index.html'), finalHtml);
 }
 
-export async function criarPastas(fromFolder, finalFolder, stylesBase = '') {
+export async function criarPastas(template, fromFolder, finalFolder, stylesBase = '') {
   await fs.promises.mkdir(finalFolder, { recursive: true });
   await fs.promises.mkdir(path.resolve(finalFolder, 'resources/images'), { recursive: true });
   await fs.promises.mkdir(path.resolve(finalFolder, 'resources/scripts'), { recursive: true });
   await fs.promises.mkdir(path.resolve(finalFolder, 'resources/styles'), { recursive: true });
 
-  await copiarRecursos(fromFolder, finalFolder);
+  await copiarRecursos(template, fromFolder, finalFolder);
 
   if (!fs.existsSync(path.resolve(finalFolder, 'resources/styles/styles.css'))) {
     await fs.promises.writeFile(path.resolve(finalFolder, 'resources/styles/styles.css'), stylesBase);

@@ -1,0 +1,9 @@
+artes
+ingles
+eddigital
+prodtexto
+regionais-sul
+regionais-centrooeste
+regionais-suldeste
+regionais-norte
+regionais-nordeste

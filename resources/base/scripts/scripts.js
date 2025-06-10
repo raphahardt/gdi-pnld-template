@@ -46,6 +46,7 @@ if (zoomContainer) {
   let startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
 
   function zoomMoveStart(ev) {
+    ev.preventDefault();
     const rect = getPrincipalRect();
 
     const elem = ev.type === "touchstart" ? ev.touches[0] : ev;
@@ -141,7 +142,7 @@ if (menu) {
 
 const clickables = new Map();
 
-document.querySelectorAll("[data-click]").forEach((item) => {
+document.querySelectorAll("[data-click],[data-click-hidden]").forEach((item, itemIndex) => {
   // faz com que o item seja focável
   //item.tabIndex = 0;
   let action = { action: "none", id: "" };
@@ -154,17 +155,28 @@ document.querySelectorAll("[data-click]").forEach((item) => {
   if (item.dataset.collapseToggle) {
     action = { action: "collapse", id: item.dataset.collapseToggle };
   }
-  clickables.set(`${action.action}${action.id}`, { menuItems: [], action });
+  if (!clickables.has(`${action.action}${action.id}`)) {
+    clickables.set(`${action.action}${action.id}`, {menuItems: [], action});
+  }
 
   document.querySelectorAll("ul[data-menu]").forEach((menu) => {
     const menuItemLi = document.createElement("li");
     const menuItem = document.createElement("button");
     menuItem.classList.add("menu-item");
     menuItem.classList.add(`m-${action.action}${action.id}`);
-    if (item.dataset.click.match(/<span.*<\/span>/)) {
-      menuItem.innerHTML = item.dataset.click.replace(/<(?!\/?span).*?>/g, ""); // retira todas as tags q não sejam span
-    } else {
-      menuItem.innerText = item.dataset.click;
+    if (item.hasAttribute("data-click-hidden")) {
+      menuItemLi.style.overflow = "hidden";
+      menuItemLi.style.height = "0";
+      menuItemLi.style.padding = "0";
+      menuItemLi.style.border = "none";
+      menuItemLi.setAttribute("aria-hidden", "true");
+      menuItem.innerText = `Clicável ${itemIndex + 1} (oculto)`;
+    } else if (item.dataset.click) {
+      if (item.dataset.click.match(/<span.*<\/span>/)) {
+        menuItem.innerHTML = item.dataset.click.replace(/<(?!\/?span).*?>/g, ""); // retira todas as tags q não sejam span
+      } else {
+        menuItem.innerText = item.dataset.click;
+      }
     }
 
     clickables.get(`${action.action}${action.id}`).menuItems.push(menuItem);
@@ -455,16 +467,6 @@ function getPopupParent(popup) {
 }
 
 function openPopup(handle, popup) {
-  const ck = clickables.get(`popup${handle.dataset.popupOpen}`);
-  if (ck) {
-    menu.querySelectorAll("button.active").forEach((c) => {
-      c.classList.remove("active");
-    });
-    ck.menuItems.forEach((c) => {
-      c.classList.add("active");
-    });
-  }
-
   if (backdrop.classList.contains('open')) {
     if (handle.hasAttribute('data-popup-close')) {
       const openedPopup = handle.closest('[data-popup].open');
@@ -476,6 +478,17 @@ function openPopup(handle, popup) {
       return;
     }
   }
+  const ck = clickables.get(`popup${handle.dataset.popupOpen}`);
+  if (ck) {
+    console.log("ck", ck);
+    menu.querySelectorAll("button.active").forEach((c) => {
+      c.classList.remove("active");
+    });
+    ck.menuItems.forEach((c) => {
+      c.classList.add("active");
+    });
+  }
+
   popup.classList.add('open');
   backdrop.classList.add('open');
   menu.classList.add('temp-close');
@@ -563,6 +576,38 @@ document.querySelectorAll('[data-popup]').forEach((popup) => {
   closeBtn.addEventListener('click', () => {
     closePopup(popup);
   });
+
+  const slideRightButton = popup.querySelector('.popup-slide-right');
+  const slideLeftButton = popup.querySelector('.popup-slide-left');
+  const popupSlides = popup.querySelectorAll('.data-popup-slide');
+
+  if (slideRightButton && slideLeftButton && popupSlides.length > 0) {
+    slideRightButton.addEventListener('click', () => {
+      const currentActiveSlide = popup.querySelector('.data-popup-slide.ativo');
+      let nextSlide = currentActiveSlide.nextElementSibling;
+
+      // Se não houver próximo irmão ou não for um slide, volta para o primeiro slide
+      if (!nextSlide || !nextSlide.classList.contains('data-popup-slide')) {
+        nextSlide = popupSlides[0];
+      }
+
+      currentActiveSlide.classList.remove('ativo');
+      nextSlide.classList.add('ativo');
+    });
+
+    slideLeftButton.addEventListener('click', () => {
+      const currentActiveSlide = popup.querySelector('.data-popup-slide.ativo');
+      let prevSlide = currentActiveSlide.previousElementSibling;
+
+      // Se não houver irmão anterior ou não for um slide, volta para o último slide
+      if (!prevSlide || !prevSlide.classList.contains('data-popup-slide')) {
+        prevSlide = popupSlides[popupSlides.length - 1];
+      }
+
+      currentActiveSlide.classList.remove('ativo');
+      prevSlide.classList.add('ativo');
+    });
+  }
 
   // joga os popups no final do principal
   principalElem.appendChild(popup);

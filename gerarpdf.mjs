@@ -33,9 +33,9 @@ for await (const folder of iterateFolders(selectedPath)) {
   }
 
   const isVertical = htmlCode.match(/class="vertical/);
-  const isCarousel = htmlCode.match(/data\-slide/);
+  const isCarousel = htmlCode.match(/data-slide/);
 
-  const clickables = htmlCode.match(/\b(data-click|data-slide)\b/g) ?? [];
+  const clickables = htmlCode.match(/\b(data-click(-hidden)?|data-slide)\b/g) ?? [];
 
   if (!(await fs.promises.readFile(path.resolve(folder, 'resources/scripts/scripts.js'), 'utf-8')).match(/if \(hash\) \{/)) {
     console.log('Atualize primeiro os resources usando o comando "node atualizar_resources.mjs"');

@@ -1,4 +1,6 @@
+import fs from "fs";
 import inquirer from 'inquirer';
+import path from "path";
 
 import { copiarRecursos } from "./_modulos/arqhtml.mjs";
 import folderPrompt from "./_modulos/folderPrompt.mjs";
@@ -18,11 +20,29 @@ if (!finalFolder) {
 
 setLastFolder(finalFolder);
 
-const confirm = await inquirer.prompt({
-  type: 'confirm',
-  message: 'Deseja realmente atualizar os resources?',
-  name: 'confirm',
-});
+const TEMPLATES = fs
+.readdirSync(path.resolve(import.meta.dirname, 'resources'))
+.filter((d) => d !== "base");
+
+/**
+ * @type {{confirm: boolean, template: string}}
+ */
+const confirm = await inquirer.prompt([
+  {
+    type: 'confirm',
+    message: 'Deseja realmente atualizar os resources?',
+    name: 'confirm',
+  },
+  {
+    type: 'list',
+    choices: TEMPLATES.map((template) => ({
+      name: template.toUpperCase(),
+      value: template,
+    })),
+    message: 'Escolha o template:',
+    name: 'template',
+  },
+]);
 
 if (!confirm.confirm) {
   console.log('Operação cancelada');
@@ -31,7 +51,10 @@ if (!confirm.confirm) {
 
 let i = 0;
 for await (const folder of iterateFolders(finalFolder)) {
-  await copiarRecursos(import.meta.dirname, folder);
+  if (!folder.match(new RegExp("-" + confirm.template + "-", "i"))) {
+    continue; // Ignora pastas que não são desse template
+  }
+  await copiarRecursos(confirm.template, import.meta.dirname, folder);
   console.log('Resources atualizados: ' + folder);
   i++;
 }

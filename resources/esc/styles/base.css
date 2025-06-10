@@ -519,6 +519,47 @@ body.vertical [data-popup].big { width: 660px }
     margin-top: 90px;
 }
 
+.data-popup-slide {
+    display: none;
+}
+
+.data-popup-slide.ativo {
+    display: block;
+}
+
+.paragrafo-popup {
+    margin: 0;
+    padding: 10px 0 0 0;
+}
+
+.popup-slide-left,
+.popup-slide-right {
+    position: absolute;
+    top: 30%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 56px;
+    background-color: white;
+    color: black;
+    font-size: 2rem;
+    text-align: center;
+    line-height: 50px;
+    z-index: 99;
+    border: 0;
+    vertical-align: middle;
+    cursor: url("../images/click-azul.png") 6 6, pointer;
+}
+
+.popup-slide-left {
+    left: 0;
+    border-radius: 0 50% 50% 0;
+}
+
+.popup-slide-right {
+    right: 0;
+    border-radius: 50% 0 0 50%;
+}
+
 [data-collapse] { display: none }
 [data-collapse][data-collapse-tipo="zoom"] { display: block; transform: scale(0); transition: transform 300ms; height: 0 }
 [data-collapse].open { transform: scale(1); display: block; height: auto }

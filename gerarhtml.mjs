@@ -5,24 +5,40 @@ import { criarHtml, criarPastas } from "./_modulos/arqhtml.mjs";
 import { gerarCarousel } from "./_modulos/carousel.mjs";
 import { gerarInfMap } from "./_modulos/infmap.mjs";
 
-const MATERIAS = [
-  {materia: 'ciencias'},
-  {materia: 'geografia'},
-  {materia: 'historia'},
-  {materia: 'matematica'},
-  {materia: 'portugues'},
-  {materia: 'interdisciplinar'},
-]
+const TEMPLATES = fs
+.readdirSync(path.resolve(import.meta.dirname, 'resources'))
+.filter((d) => d !== "base");
 
 /**
- * @type {{nome: string, versao: string, mat: {materia: string}, vertical: boolean, tipo: string, titulo: string}}
+ * @type {{nome: string, template: string}}
  */
-const infos = await inquirer.prompt([
+const preinfos = await inquirer.prompt([
   {
     type: 'input',
-    message: 'Qual vai ser o nome da pasta (exemplo: ART-INF3):',
+    message: 'Qual vai ser o nome da pasta do projeto. Coloque somente o sufixo, o prefixo vai ser colocado automaticamente (exemplo: ART-INF3):',
     name: 'nome',
   },
+  {
+    type: 'list',
+    choices: TEMPLATES.map((template) => ({
+      name: template.toUpperCase(),
+      value: template,
+    })),
+    message: 'Escolha o template (o nome vai ser parte do prefixo, exemplo: ESC-ART-INF3):',
+    name: 'template',
+  },
+]);
+
+if (!fs.existsSync(path.resolve(import.meta.dirname, 'materias', preinfos.template + ".txt"))) {
+  console.error(`Template "${preinfos.template}" não encontrado em ${import.meta.dirname}/materias`);
+  process.exit(1);
+}
+const materiasContent = fs.readFileSync(path.resolve(import.meta.dirname, 'materias', preinfos.template + ".txt"), 'utf-8');
+const MATERIAS = materiasContent.split('\n').map(f => f.trim()).filter(f => f.length > 0);
+/**
+ * @type {{versao: string, mat: string, vertical: boolean, tipo: string, titulo: string}}
+ */
+const infos = await inquirer.prompt([
   {
     type: 'list',
     choices: [
@@ -38,7 +54,7 @@ const infos = await inquirer.prompt([
   {
     type: 'list',
     choices: MATERIAS.map((obj) => ({
-      name: `${obj.materia}`,
+      name: obj,
       value: obj,
     })),
     message: 'Escolha a matéria:',
@@ -63,9 +79,10 @@ const infos = await inquirer.prompt([
   },
 ]);
 
-const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.materia}`;
+const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat}`;
+const nameTemplate = preinfos.template.toUpperCase();
 
-const generateFolder = path.resolve(import.meta.dirname, 'projetos', `${infos.versao}-ESC-${infos.nome}`);
+const generateFolder = path.resolve(import.meta.dirname, 'projetos', `${infos.versao}-${nameTemplate}-${preinfos.nome}`);
 
 let htmlInfo;
 if (infos.tipo === "Carrossel") {
@@ -76,7 +93,7 @@ if (infos.tipo === "Carrossel") {
 
 console.log("Gerando HTML...");
 
-await criarPastas(import.meta.dirname, generateFolder, htmlInfo.styles || '');
+await criarPastas(preinfos.template, import.meta.dirname, generateFolder, htmlInfo.styles || '');
 await criarHtml(import.meta.dirname, generateFolder, infos.titulo, bodyClass, htmlInfo.conteudo);
 
 if (htmlInfo.copyFiles) {
