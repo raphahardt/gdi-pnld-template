@@ -5,6 +5,15 @@ import { criarHtml, criarPastas } from "./_modulos/arqhtml.mjs";
 import { gerarCarousel } from "./_modulos/carousel.mjs";
 import { gerarInfMap } from "./_modulos/infmap.mjs";
 
+process.on('uncaughtException', (error) => {
+  if (error instanceof Error && error.name === 'ExitPromptError') {
+    console.log('Operação cancelada.');
+  } else {
+    // Rethrow unknown errors
+    throw error;
+  }
+});
+
 const TEMPLATES = fs
 .readdirSync(path.resolve(import.meta.dirname, 'resources'))
 .filter((d) => d !== "base");
@@ -36,7 +45,7 @@ if (!fs.existsSync(path.resolve(import.meta.dirname, 'materias', preinfos.templa
 const materiasContent = fs.readFileSync(path.resolve(import.meta.dirname, 'materias', preinfos.template + ".txt"), 'utf-8');
 const MATERIAS = materiasContent.split('\n').map(f => f.trim()).filter(f => f.length > 0);
 /**
- * @type {{versao: string, mat: string, vertical: boolean, tipo: string, titulo: string}}
+ * @type {{versao: string, mat: string[], vertical: boolean, tipo: string, titulo: string}}
  */
 const infos = await inquirer.prompt([
   {
@@ -52,7 +61,7 @@ const infos = await inquirer.prompt([
     default: "V1"
   },
   {
-    type: 'list',
+    type: 'checkbox',
     choices: MATERIAS.map((obj) => ({
       name: obj,
       value: obj,
@@ -79,7 +88,7 @@ const infos = await inquirer.prompt([
   },
 ]);
 
-const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat}`;
+const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.join(" ")}`;
 const nameTemplate = preinfos.template.toUpperCase();
 
 const generateFolder = path.resolve(import.meta.dirname, 'projetos', `${infos.versao}-${nameTemplate}-${preinfos.nome}`);
