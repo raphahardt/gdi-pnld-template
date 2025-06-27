@@ -36,90 +36,100 @@ function getPrincipalRect() {
 }
 
 // zoom principal
-const zoomContainer = document.querySelector("[data-zoom-principal]");
+const zoomContainers = [
+  document.querySelector("[data-zoom-principal]"),
+  ...document.querySelectorAll("[data-zoom-interno] > [data-zoom-interno-conteudo]")
+];
 
-if (zoomContainer) {
-  const zoomAdder = 0.5;
-  let dragging = false;
-  let offsetX = 0, offsetY = 0;
-  let startX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
-  let startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
+zoomContainers.forEach((zoomContainer) => {
+  if (zoomContainer) {
+    let dragging = false;
+    let offsetX = 0, offsetY = 0;
+    let startX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
+    let startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
 
-  function zoomMoveStart(ev) {
-    ev.preventDefault();
-    const rect = getPrincipalRect();
-
-    const elem = ev.type === "touchstart" ? ev.touches[0] : ev;
-
-    offsetX = (elem.clientX - rect.x) / mainScale;
-    offsetY = (elem.clientY - rect.y) / mainScale;
-
-    startX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
-    startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
-
-    dragging = true;
-  }
-
-  function zoomMove(ev) {
-    if (dragging) {
+    function zoomMoveStart(ev) {
+      ev.preventDefault();
       const rect = getPrincipalRect();
-      const scale = parseFloat(zoomContainer.style.getPropertyValue("--zoom-mult") || 1);
-      const limitX = (((proportion.ho * scale) - proportion.ho) / 2) / scale;
-      const limitY = (((proportion.ve * scale) - proportion.ve) / 2) / scale;
 
-      const elem = ev.type === "touchmove" ? ev.touches[0] : ev;
+      const elem = ev.type === "touchstart" ? ev.touches[0] : ev;
 
-      const cliX = (elem.clientX - rect.x) / mainScale;
-      const cliY = (elem.clientY - rect.y) / mainScale;
+      offsetX = (elem.clientX - rect.x) / mainScale;
+      offsetY = (elem.clientY - rect.y) / mainScale;
 
-      const deltaX = cliX - offsetX;
-      const deltaY = cliY - offsetY;
+      startX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
+      startY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
 
-      const newX = Math.min(Math.max(startX + deltaX, -limitX), limitX);
-      const newY = Math.min(Math.max(startY + deltaY, -limitY), limitY);
-
-      zoomContainer.style.setProperty("--zoom-offset-x", `${newX}px`);
-      zoomContainer.style.setProperty("--zoom-offset-y", `${newY}px`);
+      dragging = true;
     }
-  }
 
-  function zoomMoveEnd(ev) {
-    ev.preventDefault();
-    dragging = false;
-  }
+    function zoomMove(ev) {
+      if (dragging) {
+        const rect = getPrincipalRect();
+        const scale = parseFloat(zoomContainer.style.getPropertyValue("--zoom-mult") || 1);
+        const limitX = (((proportion.ho * scale) - proportion.ho) / 2) / scale;
+        const limitY = (((proportion.ve * scale) - proportion.ve) / 2) / scale;
 
-  zoomContainer.addEventListener("mousedown", zoomMoveStart);
-  zoomContainer.addEventListener("mousemove", zoomMove);
-  zoomContainer.addEventListener("mouseup", zoomMoveEnd);
-  zoomContainer.addEventListener("touchstart", zoomMoveStart);
-  zoomContainer.addEventListener("touchmove", zoomMove);
-  zoomContainer.addEventListener("touchend", zoomMoveEnd);
+        const elem = ev.type === "touchmove" ? ev.touches[0] : ev;
 
-  const zoomButtons = [document.createElement("button"), document.createElement("button")]
-    .map((btn, i) => {
-      const isOut = i === 0;
-      btn.classList.add("zoom-btn");
-      btn.classList.add(`zoom-${isOut ? "out" : "in"}`);
-      btn.addEventListener("click", (event) => {
-        const adder = isOut ? -zoomAdder : zoomAdder;
-        const scale = parseFloat(zoomContainer.style.getPropertyValue("--zoom-mult") || 1) + adder;
-        const normalizedScale = Math.max(1, Math.min(10, scale));
-        zoomContainer.style.setProperty("--zoom-mult", normalizedScale);
+        const cliX = (elem.clientX - rect.x) / mainScale;
+        const cliY = (elem.clientY - rect.y) / mainScale;
 
-        // atualiza o offset pra não quebrar o conteúdo
-        const actX = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
-        const actY = parseFloat(zoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
-        const limitX = (((proportion.ho * normalizedScale) - proportion.ho) / 2) / normalizedScale;
-        const limitY = (((proportion.ve * normalizedScale) - proportion.ve) / 2) / normalizedScale;
-        const newX = Math.min(Math.max(actX, -limitX), limitX);
-        const newY = Math.min(Math.max(actY, -limitY), limitY);
+        const deltaX = cliX - offsetX;
+        const deltaY = cliY - offsetY;
+
+        const newX = Math.min(Math.max(startX + deltaX, -limitX), limitX);
+        const newY = Math.min(Math.max(startY + deltaY, -limitY), limitY);
 
         zoomContainer.style.setProperty("--zoom-offset-x", `${newX}px`);
         zoomContainer.style.setProperty("--zoom-offset-y", `${newY}px`);
-      })
+      }
+    }
 
-      return btn;
-    });
+    function zoomMoveEnd(ev) {
+      ev.preventDefault();
+      dragging = false;
+    }
+
+    zoomContainer.addEventListener("mousedown", zoomMoveStart);
+    zoomContainer.addEventListener("mousemove", zoomMove);
+    zoomContainer.addEventListener("mouseup", zoomMoveEnd);
+    zoomContainer.addEventListener("touchstart", zoomMoveStart);
+    zoomContainer.addEventListener("touchmove", zoomMove);
+    zoomContainer.addEventListener("touchend", zoomMoveEnd);
+  }
+})
+if (zoomContainers.length) {
+  const zoomAdder = 0.5;
+  const firstZoomContainer = zoomContainers[0];
+
+  const zoomButtons = [document.createElement("button"), document.createElement("button")]
+  .map((btn, i) => {
+    const isOut = i === 0;
+    btn.classList.add("zoom-btn");
+    btn.classList.add(`zoom-${isOut ? "out" : "in"}`);
+    btn.addEventListener("click", (event) => {
+      const adder = isOut ? -zoomAdder : zoomAdder;
+      const scale = parseFloat(firstZoomContainer.style.getPropertyValue("--zoom-mult") || 1) + adder;
+      const normalizedScale = Math.max(1, Math.min(10, scale));
+
+      // atualiza o offset pra não quebrar o conteúdo
+      const actX = parseFloat(firstZoomContainer.style.getPropertyValue("--zoom-offset-x") || 0);
+      const actY = parseFloat(firstZoomContainer.style.getPropertyValue("--zoom-offset-y") || 0);
+      const limitX = (((proportion.ho * normalizedScale) - proportion.ho) / 2) / normalizedScale;
+      const limitY = (((proportion.ve * normalizedScale) - proportion.ve) / 2) / normalizedScale;
+      const newX = Math.min(Math.max(actX, -limitX), limitX);
+      const newY = Math.min(Math.max(actY, -limitY), limitY);
+
+      zoomContainers.forEach((zoomContainer) => {
+        zoomContainer.style.setProperty("--zoom-mult", normalizedScale);
+        zoomContainer.style.setProperty("--zoom-offset-x", `${newX}px`);
+        zoomContainer.style.setProperty("--zoom-offset-y", `${newY}px`);
+      });
+    })
+
+    return btn;
+  });
 
   const zoomButtonsContainer = document.createElement("div");
   zoomButtonsContainer.classList.add("zoom-buttons");
@@ -606,6 +616,38 @@ document.querySelectorAll('[data-popup]').forEach((popup) => {
 
       currentActiveSlide.classList.remove('ativo');
       prevSlide.classList.add('ativo');
+    });
+  }
+
+  const slideImageRightButton = popup.querySelector('.popup-imagem-slide-right');
+  const slideImageLeftButton = popup.querySelector('.popup-imagem-slide-left');
+  const popupImageSlides = popup.querySelectorAll('.data-popup-imagem-slide');
+
+  if (slideImageRightButton && slideImageLeftButton && popupImageSlides.length > 0) {
+    slideImageRightButton.addEventListener('click', () => {
+      const currentActiveSlideImage = popup.querySelector('.data-popup-imagem-slide.popup-imagem-ativo');
+      let nextSlideImage = currentActiveSlideImage.nextElementSibling;
+
+      // Se não houver próximo irmão ou não for um slide, volta para o primeiro slide
+      if (!nextSlideImage || !nextSlideImage.classList.contains('data-popup-imagem-slide')) {
+        nextSlideImage = popupImageSlides[0];
+      }
+
+      currentActiveSlideImage.classList.remove('popup-imagem-ativo');
+      nextSlideImage.classList.add('popup-imagem-ativo');
+    });
+
+    slideImageLeftButton.addEventListener('click', () => {
+      const currentActiveSlideImage = popup.querySelector('.data-popup-imagem-slide.popup-imagem-ativo');
+      let prevSlideImage = currentActiveSlideImage.previousElementSibling;
+
+      // Se não houver irmão anterior ou não for um slide, volta para o último slide
+      if (!prevSlideImage || !prevSlideImage.classList.contains('data-popup-imagem-slide')) {
+        prevSlideImage = popupImageSlides[popupImageSlides.length - 1];
+      }
+
+      currentActiveSlideImage.classList.remove('popup-imagem-ativo');
+      prevSlideImage.classList.add('popup-imagem-ativo');
     });
   }
 

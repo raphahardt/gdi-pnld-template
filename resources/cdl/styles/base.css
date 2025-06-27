@@ -144,7 +144,7 @@ div.backdrop.open {
     color: black;
     max-width: 1280px;
     max-height: 720px;
-    z-index: 101;
+    z-index: 103;
     animation: popup-close 300ms;
 }
 body.vertical [data-popup] {
@@ -183,7 +183,7 @@ body.vertical [data-popup].center {
     border: 0;
     padding: 0;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-    z-index: 102;
+    z-index: 103;
 }
 [data-popup].left > .close, [data-popup].right > .close, [data-popup].bottom > .close, [data-popup].top > .close,
 [data-popup].topleft > .close, [data-popup].topright > .close, [data-popup].bottomleft > .close, [data-popup].bottomright > .close,
@@ -548,6 +548,42 @@ body.vertical [data-popup].big { width: 660px }
     border-radius: 50% 0 0 50%;
 }
 
+.popup-imagem-slide-left,
+.popup-imagem-slide-right {
+    position: absolute;
+    top: 30%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 56px;
+    background-color: white;
+    color: black;
+    font-size: 2rem;
+    text-align: center;
+    line-height: 50px;
+    z-index: 99;
+    border: 0;
+    vertical-align: middle;
+    cursor: url("../images/click-azul.png") 6 6, pointer;
+}
+
+.data-popup-imagem-slide {
+    display: none;
+}
+
+.popup-imagem-ativo {
+    display: block;
+}
+
+.popup-imagem-slide-left {
+    left: 0;
+    border-radius: 0 50% 50% 0;
+}
+
+.popup-imagem-slide-right {
+    right: 0;
+    border-radius: 50% 0 0 50%;
+}
+
 [data-collapse] { display: none }
 [data-collapse][data-collapse-tipo="zoom"] { display: block; transform: scale(0); transition: transform 300ms; height: 0 }
 [data-collapse].open { transform: scale(1); display: block; height: auto }
@@ -619,11 +655,14 @@ body.vertical [data-zoom-principal] {
     border-radius: 0 12px 12px 0;
     background-image: url(../images/zoom-in.png);
 }
-[data-zoom-principal] {
+[data-zoom-principal],[data-zoom-interno-conteudo] {
     --zoom-mult: 1;
     --zoom-offset-x: 0;
     --zoom-offset-y: 0;
     transform: scale(var(--zoom-mult)) translate(var(--zoom-offset-x), var(--zoom-offset-y));
+}
+[data-zoom-interno] {
+    overflow: hidden;
 }
 
 h1 {
