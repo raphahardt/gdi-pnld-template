@@ -88,6 +88,11 @@ const infos = await inquirer.prompt([
   },
 ]);
 
+if (infos.mat.length === 0) {
+  console.error("Você precisa escolher pelo menos uma matéria.");
+  process.exit(1);
+}
+
 const bodyClass = `${infos.vertical ? 'vertical ' : ''}${infos.mat.join(" ")}`;
 const nameTemplate = preinfos.template.toUpperCase();
 
