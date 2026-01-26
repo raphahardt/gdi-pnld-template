@@ -29,16 +29,22 @@ export function* iterateFolders(folder) {
     return;
   }
 
-  if (fs.existsSync(path.join(folder, "resources")) && fs.existsSync(path.join(folder, "index.html"))) {
-    const html = fs.readFileSync(path.join(folder, "index.html"), { encoding: "utf8" });
+  const folders = fs.readdirSync(folder);
 
-    if (html.includes("/floating-ui.js")) {
-      yield folder;
-      return;
-    }
+  if (folders.some(f => f.endsWith(".html"))) {
+    yield folder;
+    return;
   }
 
-  const folders = fs.readdirSync(folder);
+  // OLD: check for resources folder and index.html
+  // if (fs.existsSync(path.join(folder, "resources")) && fs.existsSync(path.join(folder, "index.html"))) {
+  //   const html = fs.readFileSync(path.join(folder, "index.html"), { encoding: "utf8" });
+  //
+  //   if (html.includes("/floating-ui.js")) {
+  //     yield folder;
+  //     return;
+  //   }
+  // }
 
   for (const f of folders) {
     const fullPath = path.join(folder, f);

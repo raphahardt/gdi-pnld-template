@@ -2,13 +2,16 @@
   "scripts": {
     "html": "node gerarhtml.mjs",
     "pdf": "node gerarpdf.mjs",
-    "update": "node atualizar_resources.mjs"
+    "update": "node atualizar_resources.mjs",
+    "zips": "node gerar_zips.mjs"
   },
   "dependencies": {
+    "adm-zip": "^0.5.16",
     "inquirer": "^11.1.0",
     "inquirer-file-selector": "^0.4.0",
     "node-html-parser": "^6.1.13",
     "pdf-lib": "^1.17.1",
+    "sharp": "^0.34.5",
     "timesnap": "^0.3.3"
   }
 }
